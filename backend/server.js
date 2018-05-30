@@ -17,6 +17,10 @@ const db = {
   dbName: 'esu-science-of-success'
 }
 
+var dir = __dirname.split('/');
+dir.pop();
+dir = dir.join('/');
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(dir,'/client/build/static')));
 }
@@ -36,10 +40,6 @@ mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWORD + '@ds135540.mlab.co
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(logger('dev'));
-
-var dir = __dirname.split('/');
-dir.pop();
-dir = dir.join('/');
 
 console.log("index:" + dir + '/client/build/index.html');
 
