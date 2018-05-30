@@ -1,5 +1,59 @@
 body {
+  background-color: #cccfd1;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.App{
+	margin: 25px;
+	text-align: center;
+}
+
+.sidebar {
+	width: 100px;
+	display: left;
+	position: fixed;
+	background-color: #FFF;
+}
+
+.questions-holder {
+
+}
+
+.demographic-survey p {
+	margin: 5px;
+}
+
+.demographic-survey select {
+	width: 200px;
+	margin-bottom: 15px;
+	text-align: center;
+
+}
+
+.demographic-survey input{
+	margin: 15px;
+}
+
+.btn{
+	color: #111;
+}
+
+.record-icon-on {
+	opacity: 1;
+	animation: fade 2s infinite;
+}
+
+@keyframes fade {
+	0%, 100% { opacity: 0 }
+	50% { opacity: 1 }
+} 
+
+.record-icon-off {
+	opacity: 0.25;
+}
+
+.sound-wave {
+	display: none;
 }

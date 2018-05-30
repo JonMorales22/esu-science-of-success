@@ -1,0 +1,91 @@
+import React, { Component } from 'react';
+import { observer } from "mobx-react";
+import { Redirect } from 'react-router-dom'
+
+import UserStore from "../stores/UserStore";
+import 'whatwg-fetch';
+
+@observer
+class Login extends Component {
+	constructor() {
+		super();
+		this.state = ({
+			username: '',
+			password: '',
+			submit: false
+		})
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleChange(event) {
+		let type = event.target.name;
+		let value = event.target.value;
+		if(type === 'username')
+			this.setState({ username: value });
+		else if(type === 'password')
+			this.setState({ password: value });
+	}
+
+	validateForm(username, password) {
+		if(this.state.username.length > 0 && this.state.password.length > 0){
+			return true;
+		}
+		else {
+			return false; 
+		}
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+		if(this.validateForm()) {
+			console.log(UserStore.isLoggedIn)
+			const { username, password } = this.state;
+			console.log("username: " + username);
+			console.log("password: " + password);
+			fetch('/api/login', {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ username, password })
+			})
+			.then(res => res.json()).then((res) => {
+				if(res.success === true ) {
+					UserStore.logIn();
+					this.setState({ submit: true })
+				}
+				else if(res.success === false) {
+					alert(res.error);
+				}
+			})
+		}
+	}
+
+	render() {
+		if(this.state.submit === true) {
+			return <Redirect to='/dashboard' />
+		}
+		return(
+			<div className='login'>
+				<h1>Researchly Login:</h1>
+				<p><b>This page is for those with adminstrative access only!</b></p>
+				<p>Researchly does not require you to create a username/password or sign in to take a test! </p>
+				<p>If you got here on accident, please click here to return.</p>
+				<br/>
+				<form onSubmit={this.handleSubmit}>
+					<br/>
+					Username:
+					<input type='text' name='username' value={this.state.username} onChange={this.handleChange} />
+					
+					<br/>
+					Password:
+					<input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+
+					<br/>
+					<button type='submit'>Submit</button>
+				</form>
+			</div>
+		)
+	}
+}
+
+export default Login;
