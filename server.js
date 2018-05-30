@@ -3,6 +3,12 @@ const path = require('path')
 
 const app = express();
 
+var dir = __dirname.split('/');
+
+dir.pop();
+dir = dir.join('/')
+console.log(dir);
+
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/', (req,res) => {
