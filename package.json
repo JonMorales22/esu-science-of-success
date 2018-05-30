@@ -10,6 +10,6 @@
   	"start": "node server.js && heroku-postbuild",
   	"start-test": "node server.js",
   	"clean": "rm client/build",
-  	"heroku-postbuild": "yarn clean && cd client && yarn && yarn build"
+  	"heroku-postbuild": "cd client && yarn && yarn build"
   }
 }
