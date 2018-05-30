@@ -1,15 +1,46 @@
 {
   "name": "fresh-build",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.0.0",
+    "yarn": "1.6.0"
+  },
   "main": "server.js",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.3"
+    "@google-cloud/speech": "^1.5.0",
+    "atob": "^2.1.1",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
+    "dotenv": "^5.0.1",
+    "dropbox": "^4.0.5",
+    "es6-promise": "^4.2.4",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "isomorphic-fetch": "^2.2.1",
+    "mongoose": "^5.0.17",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.3",
+    "passport": "^0.4.0",
+    "passport-cookie": "^1.0.6",
+    "passport-local": "^1.0.0",
+    "shelljs": "^0.8.2"
   },
+  "devDependencies": {},
   "scripts": {
-  	"start": "node server.js && heroku-postbuild",
-  	"start-test": "node server.js",
-  	"clean": "rm client/build",
-  	"heroku-postbuild": "cd client && yarn && yarn build"
+    "build": "yarn clean && yarn build-babel",
+    "build-test": "yarn build && yarn heroku-postbuild",
+    "build-babel": "babel backend -d prod",
+    "clean": "rm -rf prod && mkdir prod",
+    "start": "yarn build && node ./prod/server.js",
+    "start-dev": "yarn build-test && nodemon dist/server.js",
+    "test": "babel-node backend/server.js",
+    "heroku-postbuild": "cd client && yarn && yarn build"
+
   }
 }
