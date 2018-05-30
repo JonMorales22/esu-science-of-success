@@ -1,0 +1,12 @@
+{
+  "name": "fresh-build",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "scripts": {
+  	"start": "node server.js"
+  }
+}
