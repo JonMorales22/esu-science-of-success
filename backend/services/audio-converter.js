@@ -39,8 +39,8 @@ export class audioConverter {
 		var dir = __dirname.split('/');
 		dir.pop();
 		dir.pop();
-		rootDir = dir;
-		ffmpegPath = path.join(dir.join('/'),'/vendor/ffmpeg');
+		rootDir = dir.join('/');
+		ffmpegPath = path.join(rootDir,'/vendor/ffmpeg');
 	}
 
 	saveAudio(base64Audio, fileName) {
@@ -90,7 +90,7 @@ export class audioConverter {
 		var oldAudioFile = rootDir + directory + fileName + originalAudioType;
 		var newAudioFile = rootDir + directory + fileName + convertedAudioType;
 		return new Promise((resolve, reject) => {
-			shell.exec( ffmpegPath + './ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
+			shell.exec( ffmpegPath + '/./ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
 				if(error) {
 					console.log(error);
 					reject(error);
