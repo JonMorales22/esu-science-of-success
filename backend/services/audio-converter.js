@@ -3,13 +3,13 @@ var atob = require('atob');
 var fs = require('fs');
 const path = require('path');
 //don't know why this audio-converter automatically outputs to the /backend directory, so I just added this variable to put all output in a /backend/audio directory 
-const directory = 'audio/'
+const directory = 'audio/';
 
 //if you need to convert audio files from something other than webm to wav, I guess you can just change these variables
-const originalAudioType = '.webm'
-const convertedAudioType = '.wav'
-var ffmpegPath = ''
-var rootDir = ''
+const originalAudioType = '.webm';
+const convertedAudioType = '.wav';
+var ffmpegPath = '';
+var rootDir = '';
 /*
 	AudioConverter:
 		This class converts an audio file  encoded in base64, converts it to binary, and then converts it to .webm, then saves it to disk.
@@ -89,7 +89,7 @@ export class audioConverter {
 		var oldAudioFile = rootDir + directory + fileName + originalAudioType;
 		var newAudioFile = rootDir + directory + fileName + convertedAudioType;
 		return new Promise((resolve, reject) => {
-			shell.exec( ffpemgPath + './ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
+			shell.exec( ffmpegPath + './ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
 				if(error) {
 					console.log(error);
 					reject(error);
