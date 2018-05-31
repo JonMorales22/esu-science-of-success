@@ -9,6 +9,7 @@ const directory = 'audio/'
 const originalAudioType = '.webm'
 const convertedAudioType = '.wav'
 var ffmpegPath = ''
+var rootDir = ''
 /*
 	AudioConverter:
 		This class converts an audio file  encoded in base64, converts it to binary, and then converts it to .webm, then saves it to disk.
@@ -38,6 +39,7 @@ export class audioConverter {
 		var dir = __dirname.split('/');
 		dir.pop();
 		dir.pop();
+		rootDir = dir;
 		ffmpegPath = path.join(dir.join('/'),'/vendor/ffmpeg');
 	}
 
@@ -84,8 +86,8 @@ export class audioConverter {
 	convertAudio(fileName) {
 		console.log('in convertAudio => ');
 		console.log('ffmpeg path: ' + ffmpegPath);
-		var oldAudioFile = directory + fileName + originalAudioType;
-		var newAudioFile = directory + fileName + convertedAudioType;
+		var oldAudioFile = rootDir + directory + fileName + originalAudioType;
+		var newAudioFile = rootDir + directory + fileName + convertedAudioType;
 		return new Promise((resolve, reject) => {
 			shell.exec( ffpemgPath + './ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
 				if(error) {
