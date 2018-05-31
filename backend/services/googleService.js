@@ -67,11 +67,6 @@ export class googleSpeechService {
       const transcription = response.results
         .map(result => result.alternatives[0].transcript)
         .join('\n');
-      //console.log(`Transcription: `, transcription);
-
-      // var data1 = { transcript: transcription, start: start }
-
-      // return (data1);
     })
     .catch(err => {
       console.error('ERROR:', err);
