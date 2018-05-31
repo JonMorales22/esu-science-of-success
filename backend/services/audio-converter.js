@@ -8,7 +8,7 @@ const directory = 'audio/'
 //if you need to convert audio files from something other than webm to wav, I guess you can just change these variables
 const originalAudioType = '.webm'
 const convertedAudioType = '.wav'
-const ffmpegPath = ''
+var ffmpegPath = ''
 /*
 	AudioConverter:
 		This class converts an audio file  encoded in base64, converts it to binary, and then converts it to .webm, then saves it to disk.
@@ -38,7 +38,7 @@ export class audioConverter {
 		var dir = __dirname.split('/');
 		dir.pop();
 		dir.pop();
-		ffmpegPath = path.join(dir.join('/'),'vendor/ffmpeg');
+		ffmpegPath = path.join(dir.join('/'),'/vendor/ffmpeg');
 	}
 
 	saveAudio(base64Audio, fileName) {
