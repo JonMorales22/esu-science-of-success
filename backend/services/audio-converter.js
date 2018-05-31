@@ -83,9 +83,9 @@ export class audioConverter {
 	*/
 	convertAudio(fileName) {
 		console.log('in convertAudio => ');
+		console.log('ffmpeg path: ' + ffmpegPath);
 		var oldAudioFile = directory + fileName + originalAudioType;
 		var newAudioFile = directory + fileName + convertedAudioType;
-
 		return new Promise((resolve, reject) => {
 			shell.exec( ffpemgPath + './ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile + ' -loglevel quiet', error => {
 				if(error) {
