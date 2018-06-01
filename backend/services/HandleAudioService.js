@@ -1,4 +1,4 @@
-//import {googleSpeechService} from './googleSpeechService.js';
+import {googleSpeechService} from './googleSpeechService.js';
 import {audioconverter} from './audio-converter.js';
 
 var shell = require('shelljs');
