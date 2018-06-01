@@ -52,8 +52,8 @@ export class audioConverter {
 
 		shell.mkdir('-p', mkdir);
 
-		console.log("mkdir:" + rootDir + '/'+ mkdir);
-		console.log("newFileName: " + rootDir + '/' + newFileName);
+		console.log("mkdir:" + mkdir);
+		console.log("newFileName: " + newFileName);
 
 		//blocking may occur here in this function call... idk how quickly the base64 webmfile can be converted to binary data
 		var audio = this.convertDataURIToBinary(base64Audio); 
