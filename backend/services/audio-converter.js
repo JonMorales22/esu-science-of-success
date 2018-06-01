@@ -45,7 +45,7 @@ export class audioConverter {
 
 	saveAudio(base64Audio, fileName) {
 		console.log('Attempting to save ' + fileName + ' to disk...');
-		var newFileName =  rootDir + directory + fileName + originalAudioType;
+		var newFileName =  rootDir + '/' + directory + fileName + originalAudioType;
 		
 		var mkdir = fileName.substring(0,fileName.indexOf('/'));
 		mkdir = rootDir + '/' +directory + mkdir
