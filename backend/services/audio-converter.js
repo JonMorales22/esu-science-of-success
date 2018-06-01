@@ -90,7 +90,7 @@ export class audioConverter {
 		var oldAudioFile = rootDir + '/' + directory + fileName + originalAudioType;
 		var newAudioFile = rootDir + '/' + directory + fileName + convertedAudioType;
 		return new Promise((resolve, reject) => {
-			shell.exec( ffmpegPath + '/./ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 ' + newAudioFile, error => {
+			shell.exec( ffmpegPath + '/./ffmpeg -y -i ' + oldAudioFile + ' -vn  -ac 1 -loglevel quiet' + newAudioFile, error => {
 				if(error) {
 					console.log(error);
 					reject(error);

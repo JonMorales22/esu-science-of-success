@@ -90,8 +90,14 @@ function handleAudio(audio, filename, testName, subjectId) {
       console.log("returned to routes => handleAudio");
       console.log(convertedAudioFile);
       
-      var ass = convertedAudioFile.substring(convertedAudioFile.indexOf('/')+1);
-      var path = '/'+ testName + '/' + subjectId + '/' + ass;
+      var newFileName = convertedAudioFile.split('/');
+      newFileName.shift();
+      newFileName.shift();
+      newFileName.shift();
+      console.log("newFileName: " + newFileName);
+      newFileName = newFileName.join('/');
+      
+      var path = '/'+ testName + '/' + subjectId + '/' + newFileName;
       var promise1 = handleAudioService.sendAudioToExternalService(convertedAudioFile);
       var promise2 = dropboxService.saveAudio(convertedAudioFile, path);
 
