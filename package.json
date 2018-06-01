@@ -41,6 +41,5 @@
     "start-dev": "yarn build-test && nodemon dist/server.js",
     "test": "babel-node backend/server.js",
     "heroku-postbuild": "cd client && yarn && yarn build && mkdir audio"
-
   }
 }
