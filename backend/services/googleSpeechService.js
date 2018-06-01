@@ -4,13 +4,7 @@ const speech = require('@google-cloud/speech');
 //Google Speech to Text API: https://cloud.google.com/speech-to-text/docs/apis
 
 // Creates a client
-const client = new speech.SpeechClient({
-	projectID: process.env.GOOGLE_PROJECT_ID,
-	credentials: {
-		private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-		client_email: process.env.GOOGLE_CLIENT_EMAIL
-	}
-});
+const client = new speech.SpeechClient();
 
 const config = {
     encoding: 'LINEAR16',
@@ -20,19 +14,6 @@ const config = {
 };
 
 export class GoogleSpeechService {
-
-	authorize() {
-		return new Promise(resolve => {
-			const authFactory = new GoogleAuth();
-			const jwtClient = new authFactory.JWT(
-				process.env.GOOGLE_CLIENT_EMAIL,
-				null,
-				process.env.GOOGLE_PRIVATE_KEY,
-				['https://www.googleapis.com/auth/calendar']
-			);
-			jwtClient.authorize(() => resolve(jwClient));
-		});
-	}
 
 	analyzeSpeech(fileName) {
 		console.log('in googleapi -> analyze speech');
