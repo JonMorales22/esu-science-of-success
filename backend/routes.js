@@ -91,11 +91,8 @@ function handleAudio(audio, filename, testName, subjectId) {
       console.log(convertedAudioFile);
       
       var newFileName = convertedAudioFile.split('/');
-      newFileName.shift();
-      newFileName.shift();
-      newFileName.shift();
+      newFileName = newFileName.pop();
       console.log("newFileName: " + newFileName);
-      newFileName = newFileName.join('/');
       
       var path = '/'+ testName + '/' + subjectId + '/' + newFileName;
       var promise1 = handleAudioService.sendAudioToExternalService(convertedAudioFile);
