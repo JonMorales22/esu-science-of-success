@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 import UserStore from "../stores/UserStore";
 import 'whatwg-fetch';
@@ -69,7 +69,7 @@ class Login extends Component {
 				<h1>Researchly Login:</h1>
 				<p><b>This page is for those with adminstrative access only!</b></p>
 				<p>Researchly does not require you to create a username/password or sign in to take a test! </p>
-				<p>If you got here on accident, please click here to return.</p>
+				<p>If you got here on accident, please click <Link to='/dashboard'>here</Link> to return.</p>
 				<br/>
 				<form onSubmit={this.handleSubmit}>
 					<br/>

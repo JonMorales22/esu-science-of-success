@@ -147,6 +147,9 @@ class TestDashboard extends Component {
 		else if(type === 'take-test') {
 			this.onTakeTest();
 		}
+		else if(type=='login') {
+
+		}
 		else if(type==='logout') {
 			UserStore.logIn();
 		}
@@ -295,6 +298,8 @@ class TestDashboard extends Component {
 				<div className='dashboard'>
 				<DevTools />
 							<h1>Test Dashboard:</h1>
+							<Link to='/login'><button name='login' onClick={this.handleClick}> Login </button></Link>
+							<p>Note: You do not need to login to take a test, nor do you need to create an account</p>
 							<p>Please select a test and hit "Take Test" button to continue.</p>
 							<hr/>
 							<div className='testlist'>

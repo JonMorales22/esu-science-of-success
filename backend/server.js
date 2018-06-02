@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import router from './routes';
+import passport from './passport-config';
 
 const app = express();
 const path = require('path');
@@ -39,6 +40,7 @@ mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWORD + '@ds135540.mlab.co
 
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '50mb' }));
+app.use(passport.initialize());
 app.use(logger('dev'));
 
 console.log("index:" + dir + '/client/build/index.html');
