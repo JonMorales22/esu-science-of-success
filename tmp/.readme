@@ -1,0 +1,2 @@
+Including this file so that git can find it. 
+This directory is going to store temp data that needs to exitst briefly on the server, but can get deleted later

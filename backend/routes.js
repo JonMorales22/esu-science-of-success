@@ -14,9 +14,14 @@ var fs = require('fs');
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var shell = require('shelljs');
 
 const Json2csvParser = require('json2csv').Parser;
 
+//variable name that holds path to root directory of app
+var rootDirectory = __dirname.split('/');
+rootDirectory.pop();
+rootDirectory = rootDirectory.join('/');
 
 router.put('/updateSubjects', (req,res) => {
   console.log('router get /updateSubjects')
@@ -305,14 +310,16 @@ router.post('/export-test', (req,res) => {
       console.log("fields:" + fields);
       const json2csvParser = new Json2csvParser({fields});
       const csv = json2csvParser.parse(newArray);
-      fs.writeFile('test.csv', csv, error => {
+      const filename = testName+'.csv';
+      const foldername = 'tmp'
+      fs.writeFile(path.join(rootDirectory,foldername,filename), csv, error => {
         if(error) {
           console.log(error);
           res.status(500);
           return res.json({ success: false, error: error});
         }
         else {
-          fs.readFile('test.csv', "base64", (err, data) => {
+          fs.readFile(path.join(rootDirectory,foldername,filename), "base64", (err, data) => {
             if(err) {
               console.log(err);
               res.status(500);
@@ -361,6 +368,8 @@ router.delete('/tests/:testId', (req, res, next) => {
     I'm going to attempt to comment this and explain whats going on just in case some poor soul inherits this catastrophe.
 
     The following steps occur:
+      **. this step is here because it would be bad not to have it, this deletes any temporarily stored .csv files that are created when user exports a test and its data.
+          it doesn't matter a while lot if this occurs or not, so I put it here at the beginning so it doesn't wreck the very precriously and shoddily constrcted promise chain.
       1. Attempt to delete test from database
       2. if test deleted, then remove folder from dropbox
       3. if folder successfully deleted from dropbpox, then delete all subjects from database,
@@ -375,6 +384,10 @@ router.delete('/tests/:testId', (req, res, next) => {
       8. update all responses with the NEW TEST ID
       9. I haven't gotten to this error, so I'm not sure what would happen.... :)
   */
+
+  //if this occurs or not, its not a huge deal
+  if(shell.test('-e', path.join(rootDirectory,'tmp',testName+'.csv'))) 
+    shell.rm(path.join(rootDirectory,'tmp',testName+'.csv'));
   //1
   Test.remove({ _id: testId}, error => { 
     if(error) {
@@ -668,11 +681,7 @@ router.post('/responses', (req, res) => {
 // })
 
 router.get('/', (req, res) => {
-  var dir = __dirname.split('/');
-  dir.pop();
-  dir = dir.join('/');
-  console.log(dir);
-  res.sendFile(path.join(dir,'/client/build/index.html'));
+  res.sendFile(path.join(rootDirectory,'/client/build/index.html'));
 });
 
 /*************************************************************/

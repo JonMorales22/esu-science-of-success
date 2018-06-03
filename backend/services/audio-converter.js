@@ -3,7 +3,7 @@ var atob = require('atob');
 var fs = require('fs');
 const path = require('path');
 //don't know why this audio-converter automatically outputs to the /backend directory, so I just added this variable to put all output in a /backend/audio directory 
-const directory = 'audio/';
+const directory = 'tmp/';
 
 //if you need to convert audio files from something other than webm to wav, I guess you can just change these variables
 const originalAudioType = '.webm';
