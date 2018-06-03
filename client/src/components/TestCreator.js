@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import 'whatwg-fetch';
 import UserStore from '../stores/UserStore';
 
@@ -248,6 +248,7 @@ class TestCreator extends Component {
             </div>
             
             <input type='submit' value='Save Test'/>
+            <Link to='/dashboard'><button>Cancel</button></Link>
           </form>
       </div>
     );
