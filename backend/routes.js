@@ -680,7 +680,7 @@ router.post('/responses', (req, res) => {
 //   res.render('index.html')
 // })
 
-router.get('/', (req, res) => {
+router.get('*', (req, res) => {
   res.sendFile(path.join(rootDirectory,'/client/build/index.html'));
 });
 
