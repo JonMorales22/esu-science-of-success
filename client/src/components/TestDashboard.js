@@ -149,13 +149,15 @@ class TestDashboard extends Component {
     					byteNumbers[i] = byteCharacters.charCodeAt(i);
 					}
 					var byteArray = new Uint8Array(byteNumbers);
-		    		var blob = new Blob(byteArray, {type: 'text/csv'}); // pass a useful mime type here
+		    		var blob = new Blob([byteArray], {type: 'text/csv;charset=utf-8;'}); // pass a useful mime type here
 					var url = URL.createObjectURL(blob);
-					window.open(url)
+					window.open(url);
 		    	}
 		    })
 		}
 	}
+
+
 
 	//used to handle React-Radio buttons input
 	//NOTE: react-radio buttons do no throw an event when user interacts with them!!! (I'm pretty sure this is true)

@@ -312,7 +312,7 @@ router.post('/export-test', (req,res) => {
           return res.json({ success: false, error: error});
         }
         else {
-          fs.readFile('test.csv', (err, data) => {
+          fs.readFile('test.csv', "base64", (err, data) => {
             if(err) {
               console.log(err);
               res.status(500);
@@ -328,12 +328,12 @@ router.post('/export-test', (req,res) => {
   });
 })
 
-router.get('/downloadtest/', (req,res) => {
-  res.download('/Users/jonathanmorales/Documents/Projects/heroku/fresh-build/backend/test.csv','test.csv', function(err) {
-    if(err)
-      console.log(err);
-  });
-})
+// router.get('/downloadtest/', (req,res) => {
+//   res.download('/Users/jonathanmorales/Documents/Projects/heroku/fresh-build/backend/test.csv','test.csv', function(err) {
+//     if(err)
+//       console.log(err);
+//   });
+// })
 
 
 // When a researcher deletes a test, api has to ensure that all corresponding 
