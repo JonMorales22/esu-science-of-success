@@ -7,11 +7,16 @@ import Response from './models/response';
 import passport from './passport-config';
 import {handleAudioService} from './services/HandleAudioService.js';
 import {dropboxService} from './services/DropboxService.js';
+import mongoose from "mongoose";
+//import json2csv from "json2csv";
 
 var fs = require('fs');
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+
+const Json2csvParser = require('json2csv').Parser;
+
 
 router.put('/updateSubjects', (req,res) => {
   console.log('router get /updateSubjects')
@@ -40,7 +45,7 @@ router.post('/saveaudioresponse', (req, res) => {
     return res.json({ success: false, error: "No subjectId or data detected in request body!" });
   }
 
-  Subject.findByIdAndUpdate(subjectId, {responses: data }, error => {
+  Subject.put(subjectId, {responses: data }, error => {
     if(error) {
       res.status(500);
       return res.json({ success: false, error: error})
@@ -69,8 +74,9 @@ router.post('/audioresponse', (req, res) => {
 
   var filename = subjectId + '/trial' + (trialsIndex) + '-question' + (questionsIndex);
   handleAudio(audio, filename, testName, subjectId)
+  //handleAudio returns a json object (called googleData) with following structure: {trancript: String, latency: number}
   .then(googleData => {
-    googleData.trialsIndex = trialsIndex;
+    googleData.trialsIndex = trialsIndex; 
     googleData.questionsIndex = questionsIndex;
     googleData.startTime = timeToStartRecord;
     res.json({ success: true, data: googleData});
@@ -167,7 +173,6 @@ router.get('/users', (req,res) => {
   });
 })
 
-
 /**********************************************************/
 
 /**************** TEST ROUTES API ************************/
@@ -253,6 +258,83 @@ router.post('/tests', (req, res, next) => {
     } //else
   });//test.save
 });
+
+router.post('/export-test', (req,res) => {
+  const {testId, testName} = req.body;
+  if(!testId || !testName) {
+    res.status(400);
+    res.json({ succes: false, error: "Must include testId and testName!"});
+  }
+
+  console.log("/export-test => ");
+  console.log("testId: " + testId);
+
+  const aggregate = Subject.aggregate([
+    {$match: { testId: mongoose.Types.ObjectId(testId)}},
+    {$project: { age: 1, year: 1, gender: 1, ethnicity: 1, religion: 1, dropboxURL: 1, "responses.transcript": 1 , "responses.latency": 1, "responses.startTime": 1}}
+  ], (err,result) => {
+    if(err) {
+      res.status(500);
+      console.log(err);
+      res.json({ success: false, error: err });
+    }
+    else {
+      //console.log(JSON.stringify(result));
+      var fields = [ '_id', 'age', 'year', 'gender', 'ethnicity', 'religion', 'dropboxURL']; 
+      var newArray = [];
+      for(let i=0; i<result.length; i++) {
+        var obj = {
+          _id: result[i]._id,
+          age: result[i].age,
+          year: result[i].year,
+          gender: result[i].gender,
+          ethnicity: result[i].ethnicity,
+          religion: result[i].religion,
+          dropboxURL: result[i].dropboxURL,
+        }
+        for(let x=0;x<result[i].responses.length;x++) {
+          obj["response "+(x+1)+" transcript"] = result[i].responses[x].transcript;
+          obj["response "+(x+1)+" startTime"] = result[i].responses[x].startTime;
+          obj["response "+(x+1)+" latency"] = result[i].responses[x].latency;
+          fields.push("response "+(x+1)+" transcript");
+          fields.push("response "+(x+1)+" startTime");   
+          fields.push("response "+(x+1)+" latency"); 
+        }
+        newArray.push(obj);
+      }
+      console.log("fields:" + fields);
+      const json2csvParser = new Json2csvParser({fields});
+      const csv = json2csvParser.parse(newArray);
+      fs.writeFile('test.csv', csv, error => {
+        if(error) {
+          console.log(error);
+          res.status(500);
+          return res.json({ success: false, error: error});
+        }
+        else {
+          fs.readFile('test.csv', (err, data) => {
+            if(err) {
+              console.log(err);
+              res.status(500);
+              return res.json({ success: false, error: err });
+            }
+            else {
+              res.json({ success: true, data: data});
+            }
+          })
+        }
+      })
+    }
+  });
+})
+
+router.get('/downloadtest/', (req,res) => {
+  res.download('/Users/jonathanmorales/Documents/Projects/heroku/fresh-build/backend/test.csv','test.csv', function(err) {
+    if(err)
+      console.log(err);
+  });
+})
+
 
 // When a researcher deletes a test, api has to ensure that all corresponding 
 // Subjects and Responses gets deleted as well!!!!!
@@ -494,7 +576,7 @@ router.post('/subjects', (req, res) => {
   });
 });
 
-//subject to database
+//saves subject to database
 //commented out for now
 router.put('/subjects', (req, res) => {
 	const subject = new Subject();

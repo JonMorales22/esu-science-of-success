@@ -21,7 +21,6 @@ const Routes = () => (
 			<Route exact path='/demographic-survey' component={DemographicSurvey} />
 			<Route exact path='/debriefing' component={Debriefing} />
 			<Route exact path='/login' component={Login} />
-			<Route component={NotFound} />
 		</Switch>
 	</div>
 );

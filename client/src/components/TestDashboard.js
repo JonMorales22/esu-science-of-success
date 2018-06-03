@@ -125,6 +125,38 @@ class TestDashboard extends Component {
 		}
 	}
 
+	onExportTest() {
+		if(this.state.tests.length>0&&this.state.index>=0) {
+			let test = this.state.tests[this.state.index];
+			
+			let testId = test._id;
+			let testName = test.name;
+
+			fetch(`/api/export-test`, { 
+				method: 'POST',
+		    	headers: { "Content-Type": "application/json" },
+		    	body: JSON.stringify({ testName, testId  })
+		    })
+		    .then(res => res.json()).then((res) => {
+		    	if(!res.success) {
+		    		console.log(res.error);
+		    		alert(res.error);
+		    	}
+		    	else {
+		    		var byteCharacters = atob(res.data);
+		    		var byteNumbers = new Array(byteCharacters.length);
+					for (var i = 0; i < byteCharacters.length; i++) {
+    					byteNumbers[i] = byteCharacters.charCodeAt(i);
+					}
+					var byteArray = new Uint8Array(byteNumbers);
+		    		var blob = new Blob(byteArray, {type: 'text/csv'}); // pass a useful mime type here
+					var url = URL.createObjectURL(blob);
+					window.open(url)
+		    	}
+		    })
+		}
+	}
+
 	//used to handle React-Radio buttons input
 	//NOTE: react-radio buttons do no throw an event when user interacts with them!!! (I'm pretty sure this is true)
 	handleListChange(value) {
@@ -141,7 +173,7 @@ class TestDashboard extends Component {
 			this.onDeleteTest();
 		}
 		else if(type === 'export') {
-			console.log('export');
+			this.onExportTest();
 		}
 		//stores necessary info needed to correctly pull test data across different pages/components in UserStore
 		else if(type === 'take-test') {

@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 const ResponsesSchema = new Schema({
 	subjectId: { type: Schema.Types.ObjectId, ref: 'Subject' },
 	testId: { type: Schema.Types.ObjectId, ref: 'Test'},
-	trialsIndex: Number,
-	questionsIndex: Number,
-	audio: String,
-	data: {transcript: String, latency: Number },
+	data: {trialsIndex: Number, questionsIndex: Number, transcript: String, latency: Number, startTime: Number },
 });
 
 export default mongoose.model('Response', ResponsesSchema);
