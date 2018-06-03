@@ -50,7 +50,7 @@ router.post('/saveaudioresponse', (req, res) => {
     return res.json({ success: false, error: "No subjectId or data detected in request body!" });
   }
 
-  Subject.put(subjectId, {responses: data }, error => {
+  Subject.findByIdAndUpdate(subjectId, {responses: data }, error => {
     if(error) {
       res.status(500);
       return res.json({ success: false, error: error})
