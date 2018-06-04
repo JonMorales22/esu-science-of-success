@@ -58,7 +58,20 @@ class TestDashboard extends Component {
 	onDeleteTest = () => {
 		if(!UserStore.isLoggedIn) {
 			alert("Test not deleted. Please login to delete a test!");
+			return;
 		}
+
+		let test = this.state.tests[this.state.index];
+		
+		let id = test._id;
+		let testName = test.name;
+		let checkTest = prompt("Warning! Deleting a test cannont be undone! If you are 100% sure, type in the test's name below and hit enter." + "\nTest Name: " + testName);
+		
+		if(checkTest != testName){
+			alert("Incorret test name entered! Not deleteing test!")
+			return;
+		}
+
 		//checks user has selected a test and that the test exists
 		if(this.state.tests.length>0&&this.state.index>=0) {
 			let test = this.state.tests[this.state.index];
