@@ -5,6 +5,13 @@ import { Redirect, Link } from 'react-router-dom'
 import UserStore from "../stores/UserStore";
 import 'whatwg-fetch';
 
+/*
+	Login
+		Component rendered when a user wants to login as a Researcher.
+	api endpoints
+		POST /subjects
+	props: none
+*/
 @observer
 class Login extends Component {
 	constructor() {
@@ -27,6 +34,8 @@ class Login extends Component {
 			this.setState({ password: value });
 	}
 
+
+	//simple validation, only checks if the user has filled out the forms. Could probably make this a lot more robust
 	validateForm(username, password) {
 		if(this.state.username.length > 0 && this.state.password.length > 0){
 			return true;
@@ -39,16 +48,14 @@ class Login extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		if(this.validateForm()) {
-			console.log(UserStore.isLoggedIn)
 			const { username, password } = this.state;
-			console.log("username: " + username);
-			console.log("password: " + password);
 			fetch('/api/login', {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username, password })
 			})
-			.then(res => res.json()).then((res) => {
+			.then(res => res.json())
+			.then((res) => {
 				if(res.success === true ) {
 					UserStore.logIn();
 					this.setState({ submit: true })

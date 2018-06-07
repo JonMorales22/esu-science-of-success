@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
@@ -5,17 +7,18 @@ import mongoose from 'mongoose';
 import router from './routes';
 import passport from './passport-config';
 
+
 const app = express();
 const path = require('path');
- /*========================================*/
-const PORT = process.env.PORT || 3001;
 
-const DB_USER = 'jonmorales2.718'
-const DB_PASSWORD = 'Ma121eY32'
+const PORT = process.env.PORT || 3001;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME;
 
 //connect to mongoDB
 const db = {
-  dbName: 'esu-science-of-success'
+  dbName: process.env.DB_NAME
 }
 
 var dir = __dirname.split('/');
@@ -23,10 +26,14 @@ dir.pop();
 dir = dir.join('/');
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(dir,'/client/build/static')));
+  console.log("We are in production mode.")
+  app.use(express.static(path.join(dir,'/client/build/')));
+}
+else {
+   console.log("We are in dev mode")
 }
 
-mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWORD + '@ds135540.mlab.com:35540/esu-science-of-success', {dbName: 'esu-science-of-success'} ,(error) => {
+mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWORD + '@ds135540.mlab.com:35540/esu-science-of-success', {dbName: DB_NAME} ,(error) => {
 	if(error) {
 		console.error("Couldn't connect to MongoDB!!")
 		throw error;
@@ -37,16 +44,11 @@ mongoose.connect('mongodb://' + DB_USER + ':' + DB_PASSWORD + '@ds135540.mlab.co
 	console.log(error);
 })
 
-
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(passport.initialize());
 app.use(logger('dev'));
 
-console.log("index:" + dir + '/client/build/index.html');
-
-app.use(express.static(path.join(dir,'/client/build/')));
-
 app.use('/api', router);
 
-app.listen(process.env.PORT || 5000, () => console.log("Listening to port 5000"));
+app.listen(PORT, () => console.log("Server is listening to port:" + process.env.PORT));

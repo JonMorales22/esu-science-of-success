@@ -18,27 +18,6 @@ passport.use(new Strategy(
   }
 ));
 
-
-// passport.use(new Strategy(
-//   function(username, password, res) {
-//     User.findOne({ username: username }, function (err, user) {
-//       if (err) { return res(err); }
-//       if (!user) { 
-//        return res(err, false, { 
-//          error: "Username not found!" 
-//         }); 
-//       }
-//       if (!user.validatePassword(password)) { 
-//        return res(err, false, {
-//          error: "Password is wrong!"
-//        }); 
-//       }
-//       //if everything checks out, return user
-//       return res(null, user);
-//     });
-//   }
-// ));
-
 passport.serializeUser(function(user, done) {
   done(null, user.id)
 });

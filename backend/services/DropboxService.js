@@ -1,30 +1,40 @@
 require('isomorphic-fetch');
+require('dotenv').config();
+
 var Dropbox = require('dropbox').Dropbox;
-var dbx = new Dropbox({ accessToken: 'tk0SIp3rdvAAAAAAAAAAGD_969WY93_KCvoVQdKx3e-rKpxUTX_gOrwK4MGE28H2'});
+var dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN });
 var fs = require('fs');
 
 
-//link to dropbox API docs: http://dropbox.github.io/dropbox-sdk-js/Dropbox.html#filesPropertiesAdd__anchor
+/*
+	DropboxService
+		this class servers as an 'interface' to communicate with the dropbox API. 
+		I only implemented code for the stuff I actually need from the Dropbox API
+
+
+	Dopbox API docs: http://dropbox.github.io/dropbox-sdk-js/Dropbox.html#filesPropertiesAdd__anchor
+*/
 
 const APPNAME = 'Researchly';
 const dropboxURL = 'https://www.dropbox.com/home/Apps/' + APPNAME;
 
 export class DropboxService {
 
-	/*	saves the audiofile in dropbox:
-	 	the path should follow the following params:
-		/testName/subjectId/trialNumber-QuestionNumber.wav
-	*/
 	get dropboxURL() {
 		return dropboxURL;
 	}
 
+	/*	
+		saveAudio
+			saves the audiofile in dropbox:
+	 		the path should have the following namine scheme: /testName/subjectId/trialNumber-QuestionNumber.wav
+	 	params
+	 		fileName - name of the file to be saved to dropbox
+	 		path - path to the directory where the file is to be saved 
+	 	returns
+	 		promise
+	*/
 	saveAudio(fileName, path) {
-		console.log('in dropboxservice -> save test');
-		console.log(path);
-
-		console
-
 		return new Promise((resolve, reject) => {
 			var audiofile = fs.readFile(fileName, (error,data) => {
 			if(error) {
@@ -51,9 +61,17 @@ export class DropboxService {
 			})
 		});
 		})
-
-
 	}
+
+	/*
+		createFolder
+			creates a folder in dropbox.
+		params
+			path - a string representing path of the directory to be created. 
+				   If necessary, the drobbox api automatically creates any subdirectories that don't exist in the path 
+		returns
+			promise
+	*/
 
 	createFolder(path) {
 		console.log('in dropboxservice -> create folder')
@@ -72,6 +90,15 @@ export class DropboxService {
 			})
 		})
 	}
+
+	/*
+		deleteFolder
+			deletes a folder in Dropbox.
+		param
+			path - string 
+		returns
+			promise
+	*/
 
 	deleteFolder(path) {
 		console.log('in dropboxservice -> delete folder');

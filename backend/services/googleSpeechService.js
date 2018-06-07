@@ -1,11 +1,21 @@
 const fs = require('fs');
 const speech = require('@google-cloud/speech');
-//const GoogleAuth = require('google-auth-library');
-//Google Speech to Text API: https://cloud.google.com/speech-to-text/docs/apis
+require('dotenv').config();
+
+/*
+	GoogleSpeechService
+		Class that interfaces to the GoogleSpeech Api (GSA). The GSA is pretty picky about the audio it can process. 
+		For example it can only process mono .wav or mono .flac audio files with a sample rate of 48000 hz or above, etc etc.
+		The audio files must also be sent as a JSON object, so we must convert the audio file to base64 before we send it to Google.
+
+	Google Speech to Text API Docs: https://cloud.google.com/speech-to-text/docs/apis
+*/
 
 // Creates a client
-const client = new speech.SpeechClient();
+const client = new speech.SpeechClient(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
+
+//google requires you to specify all the params of the audio file you are sendning to API
 const config = {
     encoding: 'LINEAR16',
     sampleRateHertz: 48000,
@@ -15,8 +25,18 @@ const config = {
 
 export class GoogleSpeechService {
 
+	/*
+		Analyze Speech
+			sends audio file to Google. The audio file must first be converted to base64 before sending to to Google!!!
+		params
+			fileName - string that represents name of file to be read
+		returns
+			Promise - json object that contains all the relevant data that we receive from google API
+			the json object has following body
+				{transcript: string, latency: number}
+	*/
 	analyzeSpeech(fileName) {
-		console.log('in googleapi -> analyze speech');
+		console.log('in GoogleSpeechService -> analyze speech');
 
 		return new Promise((resolve, reject) => {
 			this.readFile(fileName)
@@ -25,18 +45,16 @@ export class GoogleSpeechService {
 		    	client
 	    		.recognize(request)
 	    		.then(data => {
+	    			//google api sends us back a lot of bs, we only pick out what we need
 				    const response = data[0];
 				      
 				    let seconds = response.results[0].alternatives[0].words[0].startTime.seconds;
 				    let nanos = response.results[0].alternatives[0].words[0].startTime.nanos / 100000000;
 				    let start = seconds + '.' + nanos;
 
-				    //console.log('Start Time in seconds: ' + start);
-
 				    const transcription = response.results
 				    	.map(result => result.alternatives[0].transcript)
 				        .join('\n');
-		     		//console.log(`Transcription: `, transcription);
 
 		     		var googleData = { transcript: transcription, latency: start };
 		     		resolve(googleData); 
@@ -48,8 +66,15 @@ export class GoogleSpeechService {
 		})
 	}
 
+	/*	readFile
+			async reads a file and converts it to base64, 
+			params
+				fileName - string representing file to be read/converted
+			returns 
+				promise  - json object that contains the contents of file
+	*/
 	readFile(fileName) {
-    	console.log("in gooleSpeechService => readFile");
+    	console.log("in GooleSpeechService => readFile");
     	return new Promise((resolve, reject) => {
         	fs.readFile(fileName.toString('base64'), (error, data) => {
 	          	if(error) {

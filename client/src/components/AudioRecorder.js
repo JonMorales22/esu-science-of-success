@@ -3,6 +3,24 @@ import {ReactMic} from 'react-mic';
 import { observer } from "mobx-react";
 import recordIcon from '../assets/record-icon.png';
 
+/*
+	AudioRecorder:
+		Used to record Subject's audio in browser.
+		This component relies on npm package 'react-mic' which does all the heavy lifting.
+		I built ontop of the package, adding/removing functionality as I needed it.
+		While the Subject is recording, a png of a 'recording symbol' flashes on and off. 
+
+		The audio is recorded and stored as a blob file... which is a pain the ass to work with.
+
+		read more about blobs here: https://developer.mozilla.org/en-US/docs/Web/API/Blob
+
+	props:
+		ResponsesStore - pretty sure that this component did not work correctly if we directly manipulated the ResponseStore within the component.
+						 The solution was passing the ResponseStore in as props and then manipulating it through props.... I may be wrong though. May have to retest this later
+
+*/
+		
+//variable that holds all the initial state information. Pretty sure this is unneccesary, but I don't want to remove it for fear of messing something up.
 let initialState = ({
 	record: false,
 	timeToStartRecord: -1,
@@ -12,6 +30,9 @@ let initialState = ({
 	}
 });
 
+//We hold two variables here to keep calculate start time. We save the UTC time of when the component first mounts,
+//and when the Subject clicks on button to start recording audio. startTime-endTime = timeToStartRecord
+//we hold these variales out here because they are pretty much completely independent of react
 let startTime;
 let endTime;
 
@@ -33,15 +54,15 @@ export class AudioRecorder extends Component {
 	startRecording() {
 		endTime = new Date();
 		let timeToStartRecord = -1;
+
+		//we make sure that if Subject has already clicked record, that we don't try to recalculate the start time
 		if(this.state.timeToStartRecord < 0) {
 			timeToStartRecord = this.findtimeToStartRecord(startTime, endTime);
+			//pretty sure storing timeToStartRecord in state is useless b/c its getting stored in the ResponseStore.
 			this.setState({ timeToStartRecord: timeToStartRecord });
+			this.props.store.setTimeToStartRecord(timeToStartRecord);
 		}
 
-		this.props.store.setTimeToStartRecord(timeToStartRecord);
-		console.log("End Time: " + endTime);		
-		console.log("timeToStartRecord: "+ timeToStartRecord);
-		
 		this.setState({ record: true });
 	}
 
@@ -51,16 +72,11 @@ export class AudioRecorder extends Component {
 		});
 	}
 
-	// onData(recordedBlob) {
-	// 	console.log('chunk of real-time data');
-	// }
-
 	onStop(recordedBlob) {
-		console.log(recordedBlob);
 		if(recordedBlob) {
 			this.props.store.setResponse();
 			this.props.store.setAudiofile(recordedBlob);
-			console.log('Recorded blob is:', recordedBlob);
+			//pretty sure setting audiofile in state here is usesless b/c its getting put into the ResponseStore
 			this.setState({
 				audiofile: recordedBlob
 			})
@@ -85,7 +101,8 @@ export class AudioRecorder extends Component {
 					className='sound-wave'
 					onStop={this.onStop}
 					strokeColor='#000000'
-					backgroundColor='#FFF' />
+					backgroundColor='#FFF'
+				/>
 				<div className='button-holder'>
 					<button onClick={this.startRecording} type='button'>Start Recording</button>
 					<button onClick={this.stopRecording} type='button'>Stop Recording</button>

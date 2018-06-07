@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import UserStore from '../stores/UserStore'
 
-class Debriefing extends Component {
+/*
+	Debriefing
+		Pulls debriefing data from DB and displays it. The debriefing data is apart of the 'test' collection in MongoDb
+	API endpoints - GET /test/:testId
+	props - none
+*/
 
+class Debriefing extends Component {
 	constructor() {
 		super();
 		this.state = {
@@ -24,9 +30,7 @@ class Debriefing extends Component {
 			method: 'GET',
 	    	headers: { "Content-Type": "application/json" },
 	    })
-		//then we take response (res) and parse it to json
 		.then(res => res.json())
-		//after the response has been parsed to json, we use the data we received from it
 		.then((res) => {
 			if(!res.success) {
 				alert(res.error)

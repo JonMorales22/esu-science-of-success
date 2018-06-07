@@ -9,6 +9,10 @@ import UserStore from '../stores/UserStore';
     Currently the data for the questions and trials are being held separately in two different
     keys (arrays?) in this object's state. Maybe I can figure out a way to keep them nested as one object? 
     idk, something about keeping the data separate seems risque to me.
+  
+  Api endpoints
+    POST /tests
+
   Props: 
     Trials - number of trials per test
     Questions - number of questions per trial
@@ -87,14 +91,7 @@ class TestCreator extends Component {
         questForms.push(
           <div className='question' key={index}>
             <h3>Question {y+1}</h3>
-            {
-             /* 
-              * THIS WORKS JUST COMMENTING THIS OUT FOR DEBUGGIN PURPOSES
-              *  <textarea name='question' rows='10' cols='50'  onChange={this.handleInputChange.bind(this, index)} key={y}></textarea>
-              */
-            }
               <textarea name='question' rows='10' cols='50' value={this.state.questions[index]} onChange={this.handleInputChange.bind(this, index)} key={index}></textarea>
-          
           </div>
         )
       }
@@ -103,14 +100,6 @@ class TestCreator extends Component {
         <div className='trial' key={x}>
           <h3>Trial {x+1}</h3>
           <h4>Trial Info:</h4>
-          
-          {
-          /*
-           * THIS WORKS JUST COMMENTING THIS OUT FOR DEBUGGING FOR NOW 
-           * <textarea name='trial' rows='10' cols='50'  onChange={this.handleInputChange.bind(this, x)} key={x}></textarea> 
-          */
-          }
-
           <textarea name='trial' rows='10' cols='50' value={this.state.trials[x]} onChange={this.handleInputChange.bind(this, x)} key={x}></textarea>
           <div className='questions-holder'>
             {questForms}
@@ -122,18 +111,6 @@ class TestCreator extends Component {
 
     return trialsForms;
   }
-
-  /*
-    renderSideBar
-      creates our sidebar component, NOT REALLY GOING TO WORRY ABOUT HIS FOR RIGHT NOW!!!
-  */
-  // renderSideBar(numArr, numQuest) {
-  //   return(<Sidebar numbers={numArr} numQuest={numQuest} />)
-  // }
-
-  // handleInputChange(event) {
-  //   this.setState({name: event.target.value})
-  // }
   
   /*
     !!!!!!! NOTE: I might be manipulating state in a dangerous manner, may run into problems later !!!!
@@ -150,6 +127,8 @@ class TestCreator extends Component {
   handleInputChange(index, event) {
     let type = event.target.name
     let text = event.target.value
+
+    //this creates a deep copy of the WHOLE state
     let stateCopy = Object.assign({}, this.state);
 
     if(type === 'test'){
@@ -162,6 +141,7 @@ class TestCreator extends Component {
       this.setState({ password: text});
     }
     else if(type==='trial') {
+      //we then manipulate only the part that we need of the copied state, then we update our state with the edited copy
       //manipulating state in this way might be bad, we'll find out later
       stateCopy.trials[index] = text;
       this.setState(stateCopy)

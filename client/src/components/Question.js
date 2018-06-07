@@ -1,5 +1,12 @@
 import React from 'react';
 
+/*
+	simple component used to display a question and its contents
+	props:
+		text - question text
+		number - question number
+*/
+
 function Question(props){
 	return (
 		<div className='question'>

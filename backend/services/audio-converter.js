@@ -2,9 +2,18 @@ var shell = require('shelljs');
 var atob = require('atob');
 var fs = require('fs');
 const path = require('path');
-//don't know why this audio-converter automatically outputs to the /backend directory, so I just added this variable to put all output in a /backend/audio directory 
-const directory = 'tmp/';
 
+
+
+/*
+	AudioConverter
+		this class serves as an interface to the Ffmpeg audio converter. ffmpeg is an external, command line executable that can process pretty much any video/audio
+		filetype you can think of. My code uses an npm package called 'shelljs' (which allows me to make command line/terminal/shell calls from within this script)
+		to call ffmpeg and so it can do its thing. I realize this probably isn't the best approach, but whatevs.
+ 
+		ffmpeg docs: https://www.ffmpeg.org/ 
+*/
+const directory = 'tmp/';
 //if you need to convert audio files from something other than webm to wav, I guess you can just change these variables
 const originalAudioType = '.webm';
 const convertedAudioType = '.wav';
@@ -23,18 +32,6 @@ var rootDir = '';
 
 export class audioConverter {
 
-	/*
-		saveAudio
-			takes in an audio file encoded in base64, converts it to binary, and then converts it to webm,
-			finally it saves it to disk.
-			this surprisngly works synchronously... pretty sure I'm gonna have to make sure this works asynchronously later
-		params: 
-			base64Audio - audio file encoded in base64, this file will be convreted to webm
-			fileName - the name of the converted file webm file
-		returns:
-			promise that contains the new file name. returning a promise with the filename/type makes this more flexible, 
-			just in case I want to convert the base64 audio to something other than webm in the future (only god knows if I'd ever do that)
-	*/
 	constructor() {
 		var dir = __dirname.split('/');
 		dir.pop();
@@ -43,6 +40,18 @@ export class audioConverter {
 		ffmpegPath = path.join(rootDir,'/vendor/ffmpeg');
 	}
 
+	/*
+		saveAudio
+			takes in an audio file encoded in base64, converts it to binary, and then converts it to webm,
+			finally it saves it to disk.
+			this surprisngly works synchronously... pretty sure I'm gonna have to make sure this works asynchronously later
+		params: 
+			base64Audio - audio file encoded in base64, this file will be converted to webm
+			fileName - the name of the converted file webm file
+		returns:
+			promise that contains the new file name. returning a promise with the filename/type makes this more flexible, 
+			just in case I want to convert the base64 audio to something other than webm in the future (only god knows if I'd ever do that)
+	*/
 	saveAudio(base64Audio, fileName) {
 		console.log('Attempting to save ' + fileName + ' to disk...');
 		var newFileName =  rootDir + '/' + directory + fileName + originalAudioType;
@@ -69,19 +78,18 @@ export class audioConverter {
 					console.log(fileName + ' successfully saved to disk with following name: ' + newFileName)
 					resolve(newFileName);
 				} 
-				//this.checkFiles('audio/output.wav', 'audio/outputMono.wav', this.convertAudio(filename));
 			})	
 		})
 	}
 
 	/*
 		convertAudio
-			this method is basically an interface for external classes to use the audio-converter.
-			first it converts the .webm file to wav, then it converts the new wav file from stereo to mono
+			Converts an audio file from disk into a mono channel wav file.
+			If the audio gets successfully converted, it then deletes the old file from disk.
 		params:
 			fileName - 
 		returns:
-			nono - might have to return a promise later
+			promise - conatians a string that represents tbe new file name
 	*/
 	convertAudio(fileName) {
 		console.log('in convertAudio => ');
@@ -106,25 +114,24 @@ export class audioConverter {
 		})
 	}
 
-	// checkFile(fileName) {
-	// 	console.log('in checkFile -> fileName: ' + fileName);
-	// 	var flag=false;
-	// 	return new Promise((resolve, reject) => {
-	// 		if(shell.test('-e', fileName)) {
-	// 			flag = true;
-	// 	    	shell.rm(fileName);
-	// 		}
-	// 		resolve(fileName);
-	// 	})
-	// }
-
-
 	//JESUS CODE: DO NOT TOUCH
 	//takes base64 audio file and converts it to a binary stream
+
+	/*
+		convertDataURItoBinary
+			-DISLCAIMER: I did not write this code, I found it on somewhere in the deep depths of github. I'm going to explain what's going on
+			in this method as I understand it, however I may be incorrect.
+
+			First find any markers/extraneous data in our binary string and chop it off.
+			Then use atob method to convert the base 64 string into a normal binary string
+			third create a new array uint array buffer and input the binary string 
+	*/
 	convertDataURIToBinary(dataURI) {
 	  var BASE64_MARKER = ';base64,';	 	
 	  var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
 	  var base64 = dataURI.substring(base64Index);
+
+	  //atob is natively found in browsers. Since the server isn't in browser I had to install an npm package to use atob 
 	  var raw = atob(base64);
 	  var rawLength = raw.length;
 	  var array = new Uint8Array(new ArrayBuffer(rawLength));

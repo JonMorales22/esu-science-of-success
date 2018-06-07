@@ -8,7 +8,6 @@ import passport from './passport-config';
 import {handleAudioService} from './services/HandleAudioService.js';
 import {dropboxService} from './services/DropboxService.js';
 import mongoose from "mongoose";
-//import json2csv from "json2csv";
 
 var fs = require('fs');
 var express = require('express');
@@ -23,131 +22,15 @@ var rootDirectory = __dirname.split('/');
 rootDirectory.pop();
 rootDirectory = rootDirectory.join('/');
 
-router.put('/updateSubjects', (req,res) => {
-  console.log('router get /updateSubjects')
-  const { oldTestId, newTestId } = req.body;
+var indexFile = path.join(rootDirectory, "/client/public/index.html");
 
-  if(!oldTestId || !newTestId) {
-    res.status(400);
-    res.json({success: false, error: 'Missing 1 or both of the following: oldTestId, newTestId'})
-  }
+if(process.env.NODE_ENV === 'production')
+  indexFile=path.join(rootDirectory, "/client/build/index.html");
 
-  updateSubjects(oldTestId, newTestId)
-  .then(resolve => {
-    return res.json({ success: true })
-  })
-  .catch(error => {
-    res.status(500);
-    return res.json({ success: false, error: error });
-  })
-})
 
-router.post('/saveaudioresponse', (req, res) => {
-  const { subjectId, data } = req.body;
-
-  if(!subjectId || !data) {
-    res.status(400);
-    return res.json({ success: false, error: "No subjectId or data detected in request body!" });
-  }
-
-  Subject.findByIdAndUpdate(subjectId, {responses: data }, error => {
-    if(error) {
-      res.status(500);
-      return res.json({ success: false, error: error})
-    }
-    else {
-      return res.json({ success: true });
-    }
-  })
-})
-
-router.post('/audioresponse', (req, res) => {
-  const { subjectId, testId, testName, trialsIndex , questionsIndex, audio, timeToStartRecord } = req.body;
-  const response = new Response();
-
-  //!trialsIndex returns true when trialsIndex = 0, same for questionsIndex... therefore I used this ugly syntax 
-  if(!subjectId || !testId || !testName ||!audio || !timeToStartRecord || trialsIndex === null || questionsIndex === null ) {
-    res.status(400);
-    return res.json({ success: false, error: 'Missing one or more of the following: subjectId, testId, trialIndex, questionIndex, startTime, audio.'})
-  } 
-
-  response.subjectId = subjectId;
-  response.testId = testId;
-  response.trialsIndex = trialsIndex;
-  response.questionsIndex = questionsIndex;
-  response.startTime = timeToStartRecord
-
-  var filename = subjectId + '/trial' + (trialsIndex) + '-question' + (questionsIndex);
-  handleAudio(audio, filename, testName, subjectId)
-  //handleAudio returns a json object (called googleData) with following structure: {trancript: String, latency: number}
-  .then(googleData => {
-    googleData.trialsIndex = trialsIndex; 
-    googleData.questionsIndex = questionsIndex;
-    googleData.startTime = timeToStartRecord;
-    res.json({ success: true, data: googleData});
-  })
-  .catch(error => {
-    console.log(error);
-    return res.json({ success: false, error: error });
-  })
+router.get('/', (req, res) => {
+  res.sendFile(indexFile);
 });
-
-function handleAudio(audio, filename, testName, subjectId) {
-  console.log("handleAudio -> filename: " + filename);
-
-  return new Promise((resolve, reject) => {
-    handleAudioService.handleAudio(audio, filename)
-    .then(convertedAudioFile => {
-      console.log("returned to routes => handleAudio");
-      console.log(convertedAudioFile);
-      
-      var newFileName = convertedAudioFile.split('/');
-      newFileName = newFileName.pop();
-      console.log("newFileName: " + newFileName);
-      
-      var path = '/'+ testName + '/' + subjectId + '/' + newFileName;
-      var promise1 = handleAudioService.sendAudioToExternalService(convertedAudioFile);
-      var promise2 = dropboxService.saveAudio(convertedAudioFile, path);
-
-      Promise.all([promise1, promise2]).then(responses => {
-        console.log(responses[0]);
-        console.log(responses[1]);
-        handleAudioService.deleteFile(convertedAudioFile);
-        resolve(responses[0]);
-      })
-      .catch(error => {
-        reject(error);
-      })
-    })
-    .catch(error => {
-      reject(error);
-    })  
-  })
-}
-
-
-function checkAuthentication(req, res, next) {
-  const {username, password } = req.body;
-  
-  console.log("in checkauth");
-  console.log("\tUsername:" + username);
-  console.log("\tpassword:" + password);
-
-  passport.authenticate('local', function(error, user, info) {
-    if(error) { return res.json({ success: false, error: error}); }
-    if(!user) { 
-      return res.json({ success: false, error: "Incorrect username or password!"}); 
-    }
-    req.logIn(user, function(error) {
-      if(error) { 
-        console.log(error);
-        return res.json({ success: false, error: error });
-       }
-       console.log("User:" + user);
-       next();
-    });
-  })(req, res, next);
-}
 
 /**************** LOGIN ROUTES API ************************/
 
@@ -177,6 +60,30 @@ router.get('/users', (req,res) => {
     return res.json({ success: true, users: users });
   });
 })
+
+function checkAuthentication(req, res, next) {
+  const {username, password } = req.body;
+  
+  console.log("in checkauth");
+  console.log("\tUsername:" + username);
+  console.log("\tpassword:" + password);
+
+  passport.authenticate('local', function(error, user, info) {
+    if(error) { return res.json({ success: false, error: error}); }
+    if(!user) { 
+      return res.json({ success: false, error: "Incorrect username or password!"}); 
+    }
+    req.logIn(user, function(error) {
+      if(error) { 
+        console.log(error);
+        return res.json({ success: false, error: error });
+       }
+       console.log("User:" + user);
+       next();
+    });
+  })(req, res, next);
+}
+
 
 /**********************************************************/
 
@@ -284,7 +191,6 @@ router.post('/export-test', (req,res) => {
       res.json({ success: false, error: err });
     }
     else {
-      //console.log(JSON.stringify(result));
       var fields = [ '_id', 'age', 'year', 'gender', 'ethnicity', 'religion', 'dropboxURL']; 
       var newArray = [];
       for(let i=0; i<result.length; i++) {
@@ -334,13 +240,6 @@ router.post('/export-test', (req,res) => {
     }
   });
 })
-
-// router.get('/downloadtest/', (req,res) => {
-//   res.download('/Users/jonathanmorales/Documents/Projects/heroku/fresh-build/backend/test.csv','test.csv', function(err) {
-//     if(err)
-//       console.log(err);
-//   });
-// })
 
 
 // When a researcher deletes a test, api has to ensure that all corresponding 
@@ -519,8 +418,6 @@ function deleteResponses(testId) {
   })
 }
 
-
-
 /************************************************************/
 
 /**************** SUBJECT ROUTES API ************************/
@@ -623,6 +520,25 @@ router.put('/subjects', (req, res) => {
   })
 });
 
+router.put('/updateSubjects', (req,res) => {
+  console.log('router get /updateSubjects')
+  const { oldTestId, newTestId } = req.body;
+
+  if(!oldTestId || !newTestId) {
+    res.status(400);
+    res.json({success: false, error: 'Missing 1 or both of the following: oldTestId, newTestId'})
+  }
+
+  updateSubjects(oldTestId, newTestId)
+  .then(resolve => {
+    return res.json({ success: true })
+  })
+  .catch(error => {
+    res.status(500);
+    return res.json({ success: false, error: error });
+  })
+})
+
 /************************************************************/
 
 //subjectId: 5aed16a156530645e150e51f
@@ -676,15 +592,89 @@ router.post('/responses', (req, res) => {
   });
 });
 
-// router.get('/', (req,res) => {
-//   res.render('index.html')
-// })
+router.post('/saveaudioresponse', (req, res) => {
+  const { subjectId, data } = req.body;
 
-router.get('*', (req, res) => {
-  res.sendFile(path.join(rootDirectory,'/client/build/index.html'));
+  if(!subjectId || !data) {
+    res.status(400);
+    return res.json({ success: false, error: "No subjectId or data detected in request body!" });
+  }
+
+  Subject.findByIdAndUpdate(subjectId, {responses: data }, error => {
+    if(error) {
+      res.status(500);
+      return res.json({ success: false, error: error})
+    }
+    else {
+      return res.json({ success: true });
+    }
+  })
+})
+
+router.post('/audioresponse', (req, res) => {
+  const { subjectId, testId, testName, trialsIndex , questionsIndex, audio, timeToStartRecord } = req.body;
+  const response = new Response();
+
+  //!trialsIndex returns true when trialsIndex = 0, same for questionsIndex... therefore I used this ugly syntax 
+  if(!subjectId || !testId || !testName ||!audio || !timeToStartRecord || trialsIndex === null || questionsIndex === null ) {
+    res.status(400);
+    return res.json({ success: false, error: 'Missing one or more of the following: subjectId, testId, trialIndex, questionIndex, startTime, audio.'})
+  } 
+
+  response.subjectId = subjectId;
+  response.testId = testId;
+  response.trialsIndex = trialsIndex;
+  response.questionsIndex = questionsIndex;
+  response.startTime = timeToStartRecord
+
+  var filename = subjectId + '/trial' + (trialsIndex) + '-question' + (questionsIndex);
+  handleAudio(audio, filename, testName, subjectId)
+  //handleAudio returns a json object (called googleData) with following structure: {trancript: String, latency: number}
+  .then(googleData => {
+    googleData.trialsIndex = trialsIndex; 
+    googleData.questionsIndex = questionsIndex;
+    googleData.startTime = timeToStartRecord;
+    res.json({ success: true, data: googleData});
+  })
+  .catch(error => {
+    console.log(error);
+    return res.json({ success: false, error: error });
+  })
 });
 
-/*************************************************************/
+function handleAudio(audio, filename, testName, subjectId) {
+  console.log("handleAudio -> filename: " + filename);
 
+  return new Promise((resolve, reject) => {
+    handleAudioService.handleAudio(audio, filename)
+    .then(convertedAudioFile => {
+      console.log("returned to routes => handleAudio");
+      console.log(convertedAudioFile);
+      
+      var newFileName = convertedAudioFile.split('/');
+      newFileName = newFileName.pop();
+      console.log("newFileName: " + newFileName);
+      
+      var path = '/'+ testName + '/' + subjectId + '/' + newFileName;
+      var promise1 = handleAudioService.sendAudioToExternalService(convertedAudioFile);
+      var promise2 = dropboxService.saveAudio(convertedAudioFile, path);
+
+      Promise.all([promise1, promise2]).then(responses => {
+        console.log(responses[0]);
+        console.log(responses[1]);
+        handleAudioService.deleteFile(convertedAudioFile);
+        resolve(responses[0]);
+      })
+      .catch(error => {
+        reject(error);
+      })
+    })
+    .catch(error => {
+      reject(error);
+    })  
+  })
+}
+
+/*************************************************************/
 
 export default router;

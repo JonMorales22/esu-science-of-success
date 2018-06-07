@@ -9,10 +9,18 @@ import UserStore from '../stores/UserStore';
 		All data is gathered from drop down lists. I figured this was the easiest and most foolproof way of collecting this data.
 		Unfortunately I (at this point) do not know how to make test not render the 1st choice from drop down, maybe I'll set them all
 		to the 'prefer not to answer' selection...
-	Params:
-		none
-	Stores:
-		UserStore
+	
+		So far the only information being collected is the following:
+			-Age
+			-Gender
+			-Highest Level of Education
+			-Ethnictiy
+			-Religiosity (how religious a person is)
+
+
+	API endpoints:
+		PUT /subjects
+	Props: none
 */
 
 const customStyles = {
@@ -105,6 +113,7 @@ class DemographicSurvey extends Component {
 		this.saveSubject();
 	}
 
+	//we render age form dynamically because I wasn't about to write down 100 values by hand
 	renderAgeForm() {
 		let options = [];
 

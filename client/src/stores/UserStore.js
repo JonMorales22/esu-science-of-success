@@ -1,6 +1,10 @@
 import { observable, action } from "mobx";
 
-//FOR DEBUGGING ONLY
+/*
+	Used to keep track of user data.
+	We store testId so we can pull the test data from database whenever we need it.
+	Admittedly we could probably store the ENTIRE test in this store, but I ran out of time to test that.
+*/
 
 export class UserStore {
 	@observable isLoggedIn = false;

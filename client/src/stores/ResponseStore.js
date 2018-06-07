@@ -1,5 +1,10 @@
 import { observable, action } from "mobx";
 
+/*
+	ResponsesStore
+		used to keep track of a user's responses while they take a test.
+*/
+
 class ResponseStore {
 	@observable responses = [];
 	@observable index = 0;

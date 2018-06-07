@@ -6,7 +6,6 @@ import DevTools from "mobx-react-devtools";
 import UserStore from '../stores/UserStore';
 import 'whatwg-fetch';
 
-
 /*
 	Test Dashboard: 
 		The "main" component of the app. It lists all tests and allows the user to select a test and perform operations on then
@@ -17,6 +16,12 @@ import 'whatwg-fetch';
 			2. Subject View:
 				-default view, is shown to user if they haven't logged in.
 				-only allows users to take tests
+	
+	Api endpoints
+		GET /tests
+		DELETE /tests/:testid
+		POST /subjects
+		POST /export-test
 	props: 
 		none
 */
@@ -63,11 +68,10 @@ class TestDashboard extends Component {
 
 		let test = this.state.tests[this.state.index];
 		
-		let id = test._id;
 		let testName = test.name;
-		let checkTest = prompt("Warning! Deleting a test cannont be undone! If you are 100% sure, type in the test's name below and hit enter." + "\nTest Name: " + testName);
+		let checkTest = prompt("Warning! Deleting a test cannont be undone! If you are 100% sure, type in the test's name below and hit enter. \nTest Name: " + testName);
 		
-		if(checkTest != testName){
+		if(checkTest !== testName){
 			alert("Incorret test name entered! Not deleteing test!")
 			return;
 		}
@@ -170,8 +174,6 @@ class TestDashboard extends Component {
 		}
 	}
 
-
-
 	//used to handle React-Radio buttons input
 	//NOTE: react-radio buttons do no throw an event when user interacts with them!!! (I'm pretty sure this is true)
 	handleListChange(value) {
@@ -194,14 +196,13 @@ class TestDashboard extends Component {
 		else if(type === 'take-test') {
 			this.onTakeTest();
 		}
-		else if(type=='login') {
+		else if(type === 'login') {
 
 		}
-		else if(type==='logout') {
+		else if(type === 'logout') {
 			UserStore.logIn();
 		}
 	}
-
 
 	/*
 	  renderTestList
