@@ -15,6 +15,7 @@ require('dotenv').config();
 var priv_key = process.env.GOOGLE_PRIVATE_KEY;
 priv_key= "-----BEGIN PRIVATE KEY-----\n" + priv_key + "\n-----END PRIVATE KEY-----";
 
+
 const client = new speech.SpeechClient({
   credentials: {
     "type": process.env.GOOGLE_ACCOUNT_TYPE,
@@ -28,7 +29,8 @@ const client = new speech.SpeechClient({
     "auth_provider_x509_cert_url": process.env.GOOGLE_AUTH_PROVIDER_CERT,
     "client_x509_cert_url": process.env.GOOGLE_CLIENT_CERT_URL
   }
-});
+})	
+
 
 
 //google requires you to specify all the params of the audio file you are sendning to API
