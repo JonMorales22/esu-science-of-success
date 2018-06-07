@@ -14,7 +14,7 @@ require('dotenv').config();
 // Creates a client
 var priv_key = process.env.GOOGLE_PRIVATE_KEY;
 priv_key= "-----BEGIN PRIVATE KEY-----\n" + priv_key + "\n-----END PRIVATE KEY-----";
-
+console.log("Priv Key: " + priv_key)
 
 const client = new speech.SpeechClient({
   credentials: {
