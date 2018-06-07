@@ -29,8 +29,14 @@ Once you have NVM installed, you can use it to install Node version 8.0.0 by run
 
 Then use NPM (the native node package manager) to install yarn:
 
-`nvm install -g yarn` **Note: this command saves yarn globally on your machine. If you don't wish to install it globablly, then omit the -g.
+`nvm install -g yarn` 
 
+Now that you have yarn installed, install Concurrently and Nodemon. 
+
+```
+yarn global add concurrently
+yarn global add nodemon
+```
 Now you can clone the repo (if you haven't done so already) and run the following command in the root of the repo directory:
 
 `yarn install`
@@ -43,14 +49,27 @@ yarn install
 ``` 
 
 Now if everything worked out right, you should be able to type in the following command to get the app to work locally on your machine.
+
 `yarn run start:dev`
+
+Make sure you the previous command in the client directory!
+
+Congrats! You should have the app working locally on your machine! If everything worked out properly, you should be able to go type in localhost:3000 in your favorite web browser and see the first page of the application! If not, see below for some common errors.
 
 By default, the frontend listens on port 3000, while the backend listens on port 5000.
 
-congrats! You should have the app working locally on your machine! If not, see below for some common errors.
+<h2>Notes:</h2>
 
-<h2>Further Explanation of Technologies Used</h2>
-COMING SOON!!!
+The project is separated into two separate componenets, the frontend and backend. Theoretically, you should be able to switch out the backend and replace it with whatever other backend you like, and the same goes for the frontend. As long as you handle the API endpoints properly the app should still work.
+
+As such there are two separate package.json files, because the dependencies are handled independetly of each other. This may seem a little strange at first, but since the backend and frontend are modularized (thereotically) they shouldn't come into conflict with eachother.
+
+The reason I keep writing "theortically" is because I haven't tested this, but I don't see any reason why it shouldn't work.
+
+There are 3 separate start commands in the client/package.json file:
+*  `yarn run start:dev` - starts up both the front end and backend servers
+*  `yarn run start:server`- only runs the backend server
+*  `yarn run start:client`- starts up only the front end server
 
 <hr>
 
@@ -63,10 +82,14 @@ Common Errors:
   * this project uses Node 8.0.0. Using other versions may result in unexpected bevious
 * Using NPM instead of Yarn
   * For the most part this should be fine. However the start scripts will not work! If you REALLY feel like you don't want to use yarn and want to use NPM or another package manager, edit the start scripts sections under client/package.json
-
-
-There 3 different start scripts:
-1. start:client
-2. start:server
-3. start:dev
-
+* The default ports are occupied by other processes.
+  * To change the port thar the front end listens to, go into the client/scripts/start.js and look for a line that says (it should be around line 43)
+    `const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;`
+    Change the port to whatever port you desire (that is still valid!)
+  * There are a couple of ways you can change the backend server port:
+    *  First try to edit the .env file in the /backend directory. In the .env file, change the PORT variable to whatever port you would like.
+    *  If that doesn't work, edit the server.js file in the /backend directory directly. There is a line near the top (line 14) that says:
+       `const PORT = process.env.PORT || 3001;`
+       Change the 3001 to whatever number you would like.
+  * IMPORTANT!!! If you change the backend port, you have to let the frontend know by editing the package.json file. Go to the /client/package.json file and edit the following line. Make sure you edit the package.json file under the client directory and not the root directory!!
+       `"proxy": "http://localhost:5000",` Change 5000 to whatever port you specified above.
