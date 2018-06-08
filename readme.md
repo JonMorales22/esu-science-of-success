@@ -58,6 +58,38 @@ Congrats! You should have the app working locally on your machine! If everything
 
 By default, the frontend listens on port 3000, while the backend listens on port 5000.
 
+If everything is functional, you can move on to set your environment variables.
+
+<h2>Setting up Environment Variables</h2>
+
+First create a file named .env in the backend directory. Inside of it fill in the following information:
+```
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+PORT=5000
+DROPBOX_TOKEN=
+GOOGLE_ACCOUNT_TYPE=
+GOOGLE_PROJECT_ID=
+GOOGLE_PRIVATE_KEY_ID=
+GOOGLE_PRIVATE_KEY=
+GOOGLE_CLIENT_EMAIL=
+GOOGLE_CLIENT_ID=
+GOOGLE_AUTH_URI=
+GOOGLE_TOKEN_URI=
+GOOGLE_AUTH_PROVIDER_CERT=
+GOOGLE_CLIENT_CERT_URL
+```
+Just fill in whatever information needed AFTER the equals sign! Do not put any spaces or quotation marks!
+
+You should be able to find the Dropbox and Google token data from the developers console from each platform. 
+**Special note about filling in the GOOGLE_PRIVATE_KEY variable**
+Google will make give you the option to download the token. Download it as a .json file. Inside of it there will be a "private_key" key which looks something like this:
+```
+"private_key": "-----BEGIN PRIVATE KEY-----\nPRIVATEKEYDATAPRIVATEKEYDATAPRIVATEKEYDATA-----END PRIVATE KEY-----\n",
+```
+Inside the GOOGLE_PRIVATE_KEY environment variable, just copy the privaet key data after the string: "-----BEGIN PRIVATE KEY-----\n" and before the string: "-----END PRIVATE KEY-----\n"
+
 <h2>Troubleshooting</h2>
 Common Errors:
 
