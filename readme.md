@@ -17,15 +17,18 @@ The app currently lives on a Heroku server and uses Mlab Cloud Database Services
 
 To get the app working locally on your machine make sure you have the following installed first:
 
-* NVM - aka the "Node Version Manager," this is a handy tool for installing and switching between different node versions. things will occur if you install Node manually.
-* Node 8.0.0 - asdfsafds
+* NVM - aka the "Node Version Manager," this is a handy tool for installing and switching between different node versions. Bad/unexpected things will occur if you install Node manually.
+* Node 8.0.0 - Powerful, fast, javascrript server side scripting 
 * Yarn - Node package manager. Node comes natively with a built in package manager called NPM, but I like yarn more... so this project relies on yarn.
 
 First install NVM.
 
 Once you have NVM installed, you can use it to install Node version 8.0.0 by running the following command:
 
-`nvm use node 8.0.0`
+````
+nvm install 8.0.0
+nvm use node 8.0.0
+````
 
 Then use NPM (the native node package manager) to install yarn:
 
@@ -80,15 +83,22 @@ GOOGLE_TOKEN_URI=
 GOOGLE_AUTH_PROVIDER_CERT=
 GOOGLE_CLIENT_CERT_URL
 ```
-Just fill in whatever information needed AFTER the equals sign! Do not put any spaces or quotation marks!
-
+Just fill in whatever information needed AFTER the equals sign! Do not put any spaces right after the equal signs or use quotation marks!
+```
+DB_USER= Example_User // THIS IS WRONG
+DB_PASSWORD="Example_Password" //THIS IS ALSO WRONG!!!!
+DB_NAME=ExampleUser //this is correct!
+DROPB_BOX_TOKEN=An Example With Spaces // This is also correct. Adding spaces after the equals sign is ok, just don't add them immediately after the equals sign.
+```
 You should be able to find the Dropbox and Google token data from the developers console from each platform. 
-**Special note about filling in the GOOGLE_PRIVATE_KEY variable**
-Google will make give you the option to download the token. Download it as a .json file. Inside of it there will be a "private_key" key which looks something like this:
+
+<h4>**Special note about filling in the GOOGLE_PRIVATE_KEY variable**</h4>
+Google will make give you the option to download the token. 
+Download the token as a .json file. Inside of it there will be a "private_key" key which looks something like this:
 ```
 "private_key": "-----BEGIN PRIVATE KEY-----\nPRIVATEKEYDATAPRIVATEKEYDATAPRIVATEKEYDATA-----END PRIVATE KEY-----\n",
 ```
-Inside the GOOGLE_PRIVATE_KEY environment variable, just copy the privaet key data after the string: "-----BEGIN PRIVATE KEY-----\n" and before the string: "-----END PRIVATE KEY-----\n"
+Inside the GOOGLE_PRIVATE_KEY environment variable, just copy the private key data after the string: "-----BEGIN PRIVATE KEY-----\n" and before the string: "-----END PRIVATE KEY-----\n"
 
 <h2>Troubleshooting</h2>
 Common Errors:
