@@ -36,7 +36,7 @@ nvm use node 8.0.0
 
 Then use NPM (the native node package manager) to install yarn:
 
-`nvm install -g yarn` 
+`npm install -g yarn` 
 
 Now that you have yarn installed, install Concurrently and Nodemon. 
 
