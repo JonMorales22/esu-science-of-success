@@ -2,8 +2,7 @@
   "name": "fresh-build",
   "version": "1.0.0",
   "engines": {
-    "node": "8.0.0",
-    "yarn": "1.6.0"
+    "node": "8.0.0"
   },
   "main": "server.js",
   "license": "MIT",
