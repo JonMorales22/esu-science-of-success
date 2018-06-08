@@ -58,21 +58,6 @@ Congrats! You should have the app working locally on your machine! If everything
 
 By default, the frontend listens on port 3000, while the backend listens on port 5000.
 
-<h2>Notes:</h2>
-
-The project is separated into two separate componenets, the frontend and backend. Theoretically, you should be able to switch out the backend and replace it with whatever other backend you like, and the same goes for the frontend. As long as you handle the API endpoints properly the app should still work.
-
-As such there are two separate package.json files, because the dependencies are handled independetly of each other. This may seem a little strange at first, but since the backend and frontend are modularized (thereotically) they shouldn't come into conflict with eachother.
-
-The reason I keep writing "theortically" is because I haven't tested this, but I don't see any reason why it shouldn't work.
-
-There are 3 separate start commands in the client/package.json file:
-*  `yarn run start:dev` - starts up both the front end and backend servers
-*  `yarn run start:server`- only runs the backend server
-*  `yarn run start:client`- starts up only the front end server
-
-<hr>
-
 <h2>Troubleshooting</h2>
 Common Errors:
 
@@ -93,3 +78,18 @@ Common Errors:
        Change the 3001 to whatever number you would like.
   * IMPORTANT!!! If you change the backend port, you have to let the frontend know by editing the package.json file. Go to the /client/package.json file and edit the following line. Make sure you edit the package.json file under the client directory and not the root directory!!
        `"proxy": "http://localhost:5000",` Change 5000 to whatever port you specified above.
+
+<h2>Notes:</h2>
+
+The project is separated into two separate componenets, the frontend and backend. Theoretically, you should be able to switch out the backend and replace it with whatever other backend you like, and the same goes for the frontend. As long as you handle the API endpoints properly the app should still work.
+
+As such there are two separate package.json files, because the dependencies are handled independetly of each other. This may seem a little strange at first, but since the backend and frontend are modularized (thereotically) they shouldn't come into conflict with eachother.
+
+The reason I keep writing "theortically" is because I haven't tested this, but I don't see any reason why it shouldn't work.
+
+There are 3 separate start commands in the client/package.json file:
+*  `yarn run start:dev` - starts up both the front end and backend servers
+*  `yarn run start:server`- only runs the backend server
+*  `yarn run start:client`- starts up only the front end server
+
+<hr>
