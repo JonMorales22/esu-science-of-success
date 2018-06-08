@@ -21,7 +21,8 @@ To get the app working locally on your machine make sure you have the following 
 * Node 8.0.0 - Powerful, fast, javascrript server side scripting 
 * Yarn - Node package manager. Node comes natively with a built in package manager called NPM, but I like yarn more... so this project relies on yarn.
 
-First install NVM.
+First install NVM from this link:
+https://github.com/creationix/nvm
 
 Once you have NVM installed, you can use it to install Node version 8.0.0 by running the following command:
 
@@ -29,6 +30,9 @@ Once you have NVM installed, you can use it to install Node version 8.0.0 by run
 nvm install 8.0.0
 nvm use node 8.0.0
 ````
+**Note: Everytime you restart command line/terminal, node will revert back to whatever version has been specified as the default. If you want to change the default version use the following command:**
+`nvm alias default 6.1.0`
+
 
 Then use NPM (the native node package manager) to install yarn:
 
