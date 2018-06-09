@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {RadioGroup, Radio} from 'react-radio-group'
 import { Redirect, Link } from 'react-router-dom'
 import { observer } from "mobx-react";
-import DevTools from "mobx-react-devtools";
 import UserStore from '../stores/UserStore';
 import 'whatwg-fetch';
 
