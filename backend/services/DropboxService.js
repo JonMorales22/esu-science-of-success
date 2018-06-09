@@ -15,7 +15,7 @@ var fs = require('fs');
 	Dopbox API docs: http://dropbox.github.io/dropbox-sdk-js/Dropbox.html#filesPropertiesAdd__anchor
 */
 
-const APPNAME = 'Researchly';
+const APPNAME = 'ESU-Science-of-Success';
 const dropboxURL = 'https://www.dropbox.com/home/Apps/' + APPNAME;
 
 export class DropboxService {

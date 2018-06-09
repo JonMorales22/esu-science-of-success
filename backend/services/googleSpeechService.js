@@ -15,18 +15,6 @@ require('dotenv').config();
 var priv_key = process.env.GOOGLE_PRIVATE_KEY;
 priv_key= "-----BEGIN PRIVATE KEY-----\n" + priv_key + "\n-----END PRIVATE KEY-----";
 
-console.log("type: " + process.env.GOOGLE_ACCOUNT_TYPE);
-console.log("project id:" + process.env.GOOGLE_PROJECT_ID);
-console.log("private_key_id:" + process.env.GOOGLE_PRIVATE_KEY_ID);
-console.log("Priv Key: " + priv_key)
-console.log("client email: " + process.env.GOOGLE_CLIENT_EMAIL);
-console.log("client id:" + process.env.GOOGLE_CLIENT_ID);
-console.log("google auth uri:" + process.env.GOOGLE_AUTH_URI);
-console.log("token uri: " + process.env.GOOGLE_TOKEN_URI);
-console.log("auth prov cert: " + process.env.GOOGLE_AUTH_PROVIDER_CERT);
-console.log("client cert url:" + process.env.GOOGLE_CLIENT_CERT_URL);
-
-
 const client = new speech.SpeechClient({
   credentials: {
     "type": process.env.GOOGLE_ACCOUNT_TYPE,
