@@ -30,7 +30,7 @@ Once you have NVM installed, you can use it to install Node version 8.0.0 by run
 nvm install 8.0.0
 nvm use node 8.0.0
 ````
-**Note: Everytime you restart command line/terminal, node will revert back to whatever version has been specified as the default. If you want to change the default version use the following command:**
+**Note: Everytime you restart command line/terminal, node will revert back to whatever version has been specified as the default. For exmaple, if you want to change the default version to Node 6.1.0 use the following command:**
 `nvm alias default 6.1.0`
 
 
