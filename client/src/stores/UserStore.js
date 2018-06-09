@@ -7,11 +7,11 @@ import { observable, action } from "mobx";
 */
 
 export class UserStore {
-	@observable isLoggedIn = false;
+	@observable isLoggedIn = true;
 	@observable answeredSurvey = false;
 	@observable subjectId = '';
-	@observable testId = '';
-	@observable testName = '';
+	@observable testId = '5b1c2cbdd2595a15e0dda206';
+	@observable testName = 'testInformedConsent';
 	
 
 	@action.bound

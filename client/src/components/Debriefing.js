@@ -35,10 +35,8 @@ class Debriefing extends Component {
 			if(!res.success) {
 				alert(res.error)
 			}
-			else {
-				console.log(res.test);
-				this.setState({ test: res.test, debriefing: res.test[0].debriefing })
-			}
+			else 
+				this.setState({ test: res.test, debriefing: res.test[0].debriefing });
 		})
 	}
 

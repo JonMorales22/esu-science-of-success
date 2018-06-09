@@ -312,13 +312,12 @@ class TestDashboard extends Component {
 
 		//redirects use to the 1st part of our test
 		if(this.state.submit === true){
-			return <Redirect to='/test' />
+			return <Redirect to='/informed-consent' />
 		}
 		//if user is logged in, render Researcher view
 		else if(UserStore.isLoggedIn) {
 			return(
 				<div className='dashboard'>
-				<DevTools />
 							<h1>Test Dashboard:</h1>
 							<h2>Logged in as Researcher</h2>
 							<button name='logout' onClick={this.handleClick}> Logout </button>
@@ -344,7 +343,6 @@ class TestDashboard extends Component {
 		else{
 			return(
 				<div className='dashboard'>
-				<DevTools />
 							<h1>Test Dashboard:</h1>
 							<Link to='/login'><button name='login' onClick={this.handleClick}> Login </button></Link>
 							<p>Note: You do not need to login to take a test, nor do you need to create an account</p>

@@ -13,6 +13,7 @@ const TestsSchema = new Schema({
   trials: [{type: String}],
   questions: [{type: String}],
   debriefing: String,
+  imformed_consent: String
 }, { timestamps: true });
 
 

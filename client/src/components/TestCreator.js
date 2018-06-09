@@ -33,6 +33,7 @@ class TestCreator extends Component {
       trials: trialsArr, //dummy placeholder our trials states, when the user fills in the trials questions the state will update
       questions: questsArr, //same idea as above, but this changes the questions state
       debriefing: '',
+      informed_consent: '',
       error: null,
       submit: false,
       viewOnly: false
@@ -130,8 +131,10 @@ class TestCreator extends Component {
 
     //this creates a deep copy of the WHOLE state
     let stateCopy = Object.assign({}, this.state);
-
-    if(type === 'test'){
+    if(type === 'informed_consent') {
+      this.setState({ informed_consent: text});
+    }
+    else if(type === 'test') {
       this.setState({ name: text});
     }
     else if(type === 'username') {
@@ -217,7 +220,14 @@ class TestCreator extends Component {
 
           <form onSubmit={this.handleSubmit}>
             <h1>Test Name: {this.state.name}</h1>
+            <hr />
 
+            <div className='informed-consent-holder'>
+              <h3>Informed Consent:</h3>
+              <textarea name='informed_consent' rows='20' cols='75' type="text" value={this.state.informed_consent} onChange={this.handleInputChange.bind(this,null)}></textarea>
+            </div>
+            <hr />
+            
             <div className="trials-holder">
               {forms}
             </div>
