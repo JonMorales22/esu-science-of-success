@@ -166,19 +166,20 @@ class TestCreator extends Component {
   */
   handleSubmit(event) {
     event.preventDefault();
-    const { name, trials, questions, debriefing } = this.state; 
+    const { name, trials, questions, debriefing, informed_consent} = this.state;
+    console.log("informed consent: " + informed_consent) 
     //first make sure user is logged in and authorized to create a test
     if(!UserStore.isLoggedIn)
       return(alert("Test not saved. Please login to save a test."));
     //makes sure all relevant data is filled in
-    if(!name || !trials || !questions || !debriefing) {
+    if(!name || !trials || !questions || !debriefing ||!informed_consent) {
       alert("Please make sure all the following are filled in: test name, all trial forms, all question forms, debriefing form");
       return;
     }
     fetch('/api/tests', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, trials, questions, debriefing }),
+      body: JSON.stringify({ name, trials, questions, debriefing, informed_consent}),
     })
     .then(res => res.json()).then((res) => {
       console.log(res);

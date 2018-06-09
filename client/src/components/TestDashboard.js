@@ -241,7 +241,7 @@ class TestDashboard extends Component {
 	renderSingleTest(index) {
 		//our JSX sandwich buns
 		let trialsForms = [];
-		let debriefing;
+		let debriefing, informed_consent;
 		//first we make sure User has selected a test
 		if(index >= 0) {
 			//I place all data in placeholder variables, I think it makes it easier to read the code.
@@ -249,11 +249,19 @@ class TestDashboard extends Component {
 			let trials = test.trials;
 			let questions = test.questions;
 			debriefing = test.debriefing;
+			informed_consent = test.informed_consent;
 			let maxRows = 4;
 
 			//we put the test title on first, think of this as an olive or something... idk lol
 			trialsForms.push(<h1>Test Name: {test.name}</h1>)
 			trialsForms.push(<h3>Test Id: {test._id} </h3>)
+
+			trialsForms.push(			
+				<div className='informed-consent'>
+					<h3>Informed Consent:</h3>
+					<textarea name='informed-consent' rows='20' cols='75' type="text" value={informed_consent} readOnly></textarea>
+				</div>
+			)
 
 		    for(let x=0;x<trials.length;x++)
 		    {

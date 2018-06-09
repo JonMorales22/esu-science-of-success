@@ -8,12 +8,12 @@ import UserStore from '../stores/UserStore';
 		the way it works is pretty straightforward, not gonna add too many comments
 */
 
-const test_data = "test data for the informed consent"
+//const test_data = "test data for the informed consent"
 
 class InformedConsent extends Component {
 	constructor() {
 		super();
-		this.state = ({  data: test_data ,submit: false });
+		this.state = ({  data: "", submit: false });
 		this.handleClick = this.handleClick.bind(this);
 	}
 

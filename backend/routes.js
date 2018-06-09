@@ -114,21 +114,21 @@ router.get('/tests/:testId', (req, res) => {
 
 //saves a new test to the database
 router.post('/tests', (req, res, next) => {
-  const test = new Test();
   // body parser lets us use the req.body
-  const { name, trials, questions, debriefing } = req.body;
-  if (!name || !trials || !questions || !debriefing) {
+  const { name, trials, questions, debriefing, informed_consent} = req.body;
+  if (!name || !trials || !questions || !debriefing || !informed_consent) {
     res.status(400);
     return res.json({
       success: false,
       error: 'Please make sure ALL the following information is filled out: test name, trials, questions, and debriefing.'
     });
   }
-
+  const test = new Test();
   test.name = name;
   test.trials = trials;
   test.questions = questions;
   test.debriefing = debriefing;
+  test.informed_consent = informed_consent; 
 
   /*this unwieldy statement does the following:
     1. saves a test in the database
