@@ -99,9 +99,11 @@ You should be able to find the Dropbox and Google token data from the developers
 <h4>**Special note about filling in the GOOGLE_PRIVATE_KEY variable**</h4>
 Google will make give you the option to download the token. 
 Download the token as a .json file. Inside of it there will be a "private_key" key which looks something like this:
-```
+
+`
 "private_key": "-----BEGIN PRIVATE KEY-----\nPRIVATEKEYDATAPRIVATEKEYDATAPRIVATEKEYDATA-----END PRIVATE KEY-----\n",
-```
+`
+
 Inside the GOOGLE_PRIVATE_KEY environment variable, just copy the private key data after the string: "-----BEGIN PRIVATE KEY-----\n" and before the string: "-----END PRIVATE KEY-----\n"
 
 <h2>Troubleshooting</h2>
