@@ -20,7 +20,7 @@ The app currently lives on a Heroku server and uses Mlab Cloud Database Services
 
 <em>Overview</em>
 
-To get the app working locally on your machine, this guide will run you through the installation of the following:
+To get the app working locally on your machine, this guide will utilize the following tools:
 
 * NVM — aka the "Node Version Manager." This is a handy tool for installing and switching between different node versions. <strong>Bad or unexpected things will occur if you install Node manually.</strong>
 
@@ -80,11 +80,11 @@ yarn install
 
 <br>
 
-8.) Congrats! You should have the front end working locally on your machine. If everything worked out properly, you should be able to visit localhost:3000 in your favorite web browser and see the first page of the application. If not, see below for some common errors.
+8.) Congrats! You should have the frontend working locally on your machine. If everything worked out properly, you should be able to visit localhost:3000 in your favorite web browser and see the first page of the application. If not, see below for some common errors.
 
 Note: By default, the frontend listens on port 3000, while the backend listens on port 5000.
 
-If the front end is functional, you can move on to the backend installation guide.
+If the frontend is functional, you can move on to the backend installation guide.
 
 <br>
 
@@ -115,6 +115,9 @@ DB_PASSWORD="Example_Password" //THIS IS ALSO WRONG!!!!
 DB_NAME=ExampleUser //this is correct!
 DROPB_BOX_TOKEN=An Example With Spaces // This is also correct. Adding spaces after the equals sign is ok, just don't add them immediately after the equals sign.
 ```
+
+<br>
+
 2.) To fill in the Dropbox and Google information, you should be able to visit the developers console from each platform and pull the relevant token information from there.
 
 <h4>**Special note about filling in the GOOGLE_PRIVATE_KEY variable**</h4>
@@ -126,6 +129,8 @@ Download the token as a .json file. Inside of it there will be a "private_key" k
 `
 
 Inside the GOOGLE_PRIVATE_KEY environment variable, just copy the private key data after the string: "-----BEGIN PRIVATE KEY-----\n" and before the string: "-----END PRIVATE KEY-----\n"
+
+<br>
 
 <h2>Troubleshooting</h2>
 
@@ -149,13 +154,15 @@ Common Errors:
   * IMPORTANT!!! If you change the backend port, you must let the frontend know by editing the package.json file. Go to the /client/package.json file and edit the following line (make sure you edit the package.json file under the client directory and not the root directory!):
        `"proxy": "http://localhost:5000",` Change 5000 to whatever port you specified above.
 
+<br>
+
 <h2>Other Notes:</h2>
 
 The project is separated into two separate components, the frontend and backend. Theoretically, you should be able to switch out the backend and replace it with whatever other backend you like, and the same goes for the frontend. As long as you handle the API endpoints properly, the app should still work.
 
 Thus, because the app is separated into two components, it utilizes two separate package.json files — the dependencies are handled independently of each other. This may seem a little strange at first, but since the backend and frontend are modularized (theoretically) they shouldn't conflict with each other.
 
-The reason I keep writing "theoretically" is because <strong>I haven't tested this</strong>, but I don't see any reason why it shouldn't work.
+Note: I keep writing "theoretically" because <strong>I haven't tested this</strong>, but I don't see any reason why it shouldn't work.
 
 There are 3 separate start commands in the client/package.json file:
 *  `yarn run start:dev` - starts up both the front end and backend servers
