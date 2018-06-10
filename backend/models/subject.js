@@ -8,7 +8,7 @@ const SubjectsSchema = new Schema({
 	ethnicity: String,
 	religion: Number,
 	dropboxURL: String,
-	responses: [{ trialsIndex: Number, questionsIndex: Number, transcript: String, latency: Number , startTime: Number}],
+	responses: [{ trialsIndex: Number, questionsIndex: Number, transcript: String, latency: Number , startTime: Number, timestamps: [] }],
 	testId: {type: Schema.Types.ObjectId, ref: 'Test'}
 }, { timestamps: true });
 
