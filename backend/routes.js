@@ -183,7 +183,7 @@ router.post('/export-test', (req,res) => {
 
   const aggregate = Subject.aggregate([
     {$match: { testId: mongoose.Types.ObjectId(testId)}},
-    {$project: { age: 1, year: 1, gender: 1, ethnicity: 1, religion: 1, dropboxURL: 1, "responses.transcript": 1 , "responses.latency": 1, "responses.startTime": 1}}
+    {$project: { age: 1, year: 1, gender: 1, ethnicity: 1, religion: 1, dropboxURL: 1, "responses.transcript": 1 , "responses.latency": 1, "responses.startTime": 1, "responses.timestamps": 1}}
   ], (err,result) => {
     if(err) {
       res.status(500);
@@ -207,13 +207,14 @@ router.post('/export-test', (req,res) => {
           obj["response "+(x+1)+" transcript"] = result[i].responses[x].transcript;
           obj["response "+(x+1)+" startTime"] = result[i].responses[x].startTime;
           obj["response "+(x+1)+" latency"] = result[i].responses[x].latency;
+          obj["response "+(x+1)+" timestamps"] = result[i].responses[x].timestamps;
           fields.push("response "+(x+1)+" transcript");
           fields.push("response "+(x+1)+" startTime");   
           fields.push("response "+(x+1)+" latency"); 
+          fields.push("response "+(x+1)+" timestamps"); 
         }
         newArray.push(obj);
       }
-      console.log("fields:" + fields);
       const json2csvParser = new Json2csvParser({fields});
       const csv = json2csvParser.parse(newArray);
       const filename = testName+'.csv';
@@ -232,6 +233,7 @@ router.post('/export-test', (req,res) => {
               return res.json({ success: false, error: err });
             }
             else {
+              console.log("Successfully converted test to .csv! sending back to client")
               res.json({ success: true, data: data});
             }
           })
