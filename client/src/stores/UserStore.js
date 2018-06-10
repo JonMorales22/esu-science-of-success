@@ -9,9 +9,9 @@ import { observable, action } from "mobx";
 export class UserStore {
 	@observable isLoggedIn = false;
 	@observable answeredSurvey = false;
-	@observable subjectId = '';
-	@observable testId = '';
-	@observable testName = '';
+	@observable subjectId = '5b1c43899cd0dc1ff6219838';
+	@observable testId = '5b1c42b39cd0dc1ff6219837';
+	@observable testName = 'informedConsent';
 	
 
 	@action.bound

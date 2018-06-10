@@ -616,10 +616,10 @@ router.post('/audioresponse', (req, res) => {
   const response = new Response();
 
   //!trialsIndex returns true when trialsIndex = 0, same for questionsIndex... therefore I used this ugly syntax 
-  if(!subjectId || !testId || !testName ||!audio || !timeToStartRecord || trialsIndex === null || questionsIndex === null ) {
-    res.status(400);
-    return res.json({ success: false, error: 'Missing one or more of the following: subjectId, testId, trialIndex, questionIndex, startTime, audio.'})
-  } 
+  // if(!subjectId || !testId || !testName ||!audio || !timeToStartRecord || trialsIndex === null || questionsIndex === null ) {
+  //   res.status(400);
+  //   return res.json({ success: false, error: 'Missing one or more of the following: subjectId, testId, trialIndex, questionIndex, startTime, audio.'})
+  // } 
 
   response.subjectId = subjectId;
   response.testId = testId;

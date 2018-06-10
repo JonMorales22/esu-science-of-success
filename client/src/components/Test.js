@@ -186,6 +186,23 @@ class TestTaker extends Component {
 		});
 	}
 
+	skipQuestion() {
+		let subjectId = UserStore.subjectId;
+		data.push({
+			transcript: "",
+			latency: -10000000,
+			trialsIndex: this.state.trialsIndex,
+			questionsIndex: this.state.questionsIndex,
+			startTime: -10000000
+		});
+		console.log("data: " + JSON.stringify(data));
+
+		//TEST THIS EDGE CASE!!!!!
+		if(data.length === this.state.questions.length){
+			this.saveAnalyzedData();
+		}
+	}
+
 	//since the test data is broken up into two separate arrays (1 for the trials on 1 or the questions) we use 2 different indexes to iterate through the test
 	incrementTrialsIndex() {
 		this.setState(prevState => {
@@ -211,13 +228,28 @@ class TestTaker extends Component {
 			let response = responseStore.responses[index];
 
 			//checks response store to see if we have a response, or if the user can skip the question
-			if(!response.hasResponse && !response.canSkip) {
-				alert('Warning: You have not recorded a response! If you wish to skip the question, click the next button again.');
+			if(!response.hasResponse) {
+				alert('Warning: You have not recorded a response! If you wish to skip the question, click the skip button.');
 				//responseStore.setSkip(); //uncomment this line if you want to add functionality where user can skip the question
 			}
-			else if( response.hasResponse || response.canSkip) {
+			else if(response.hasResponse || response.canSkip) {
 				this.sendDataForAnalysis();
 				//if we are on question 0,4,8,12,16 then we show the modal
+				if(this.state.questionsIndex % this.state.questionsPerTrial === 3 && this.state.trialsIndex < this.state.trials.length-1) {
+					this.incrementTrialsIndex();
+					this.openModal();
+				}
+				if(this.state.questionsIndex < this.state.questions.length-1) {
+					responseStore.incrementIndex();
+					this.incrementQuestionsIndex();
+				}
+			}
+		}
+		else if(type === 'skip') {
+			//let skip = window.confirm("Are you sure you want to skip this question? Your response will not be saved!")
+			let skip = true;
+			if(skip===true) {
+				this.skipQuestion();
 				if(this.state.questionsIndex % this.state.questionsPerTrial === 3 && this.state.trialsIndex < this.state.trials.length-1) {
 					this.incrementTrialsIndex();
 					this.openModal();
@@ -275,10 +307,8 @@ class TestTaker extends Component {
 					<hr />
 					<Question text={this.state.questions[this.state.questionsIndex]} number={this.state.questionsIndex+1} />
 					<AudioRecorder store={responseStore} key={this.state.questionsIndex}/>
-					<button name='next' onClick={this.handleClick}> Next Question</button>
-
-					<DevTools/>
-				</div>
+					<button name='skip' onClick={this.handleClick}> Skip Question</button>
+					<button name='next' onClick={this.handleClick}> Next Question</button>				</div>
 			);
 		}
 		else {
