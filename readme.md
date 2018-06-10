@@ -1,6 +1,6 @@
 <h1>ESU Science of Success Web App</h1>
 
-<h2>Introduction</h2>
+<h2>App Overview</h2>
 
 This is a web application created to help the East Stroudsburg University Psychology Department conduct research.
 
@@ -14,12 +14,13 @@ The <strong>backend</strong> uses Mongo, Express, and Node to function, while th
 
 The app currently lives on a Heroku server and uses Mlab Cloud Database Services to host the database.
 
+<br>
 
 <h2>Installation</h2>
 
 <em>Overview</em>
 
-To get the app working locally on your machine <strong>make sure</strong> you have the following installed <strong>first</strong>:
+To get the app working locally on your machine, this guide will run you through the installation of the following:
 
 * NVM — aka the "Node Version Manager." This is a handy tool for installing and switching between different node versions. <strong>Bad or unexpected things will occur if you install Node manually.</strong>
 
@@ -27,12 +28,14 @@ To get the app working locally on your machine <strong>make sure</strong> you ha
 
 * Yarn — Node package manager. Node comes natively with a built-in package manager called NPM, but I like yarn more... so this project relies on yarn.
 
+<br>
 
 <em>Step-by-Step Frontend Installation Guide</em>
 
 1.) Install NVM from this link:
 https://github.com/creationix/nvm
 
+<br>
 2.) Once you have NVM installed, use it to install Node version 8.0.0 by running the following command:
 
 ````
@@ -41,40 +44,41 @@ nvm use node 8.0.0
 ````
 **Note: Every time you restart the command line / terminal, node will revert to whatever version has been specified as the default. For example, if you want to change the default version to Node 6.1.0 use the following command:**
 `nvm alias default 6.1.0`
-
+<br>
 3.) After installing node, you will gain access to NPM. Now use NPM to install yarn:
 
 `npm install -g yarn` 
-
+<br>
 4.) Now that you have yarn installed, install Concurrently and Nodemon. 
 
 ```
 yarn global add concurrently
 yarn global add nodemon
 ```
+<br>
 5.) You can now clone the repo (if you haven't done so already) and run the following command in the root of the repo directory:
 
 `yarn install`
-
+<br>
 6.) When that is finished, go to the /client folder and run the same command:
 
 ```
 cd client
 yarn install
 ``` 
-
+<br>
 7.) If everything worked out, you should be able to type the following command to get the app working locally on your machine:
 
 `yarn run start:dev`
 
 <strong>Make sure you this command in the /client directory!</strong>
-
+<br>
 8.) Congrats! You should have the front end working locally on your machine. If everything worked out properly, you should be able to visit localhost:3000 in your favorite web browser and see the first page of the application. If not, see below for some common errors.
 
 Note: By default, the frontend listens on port 3000, while the backend listens on port 5000.
 
 If the front end is functional, you can move on to set your environment variables.
-
+<br>
 <em>Backend Installation Guide</em>
 
 1.) Create a file named .env in the /backend directory. Inside of that file, input the following information:
